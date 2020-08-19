@@ -1,0 +1,83 @@
+{
+  "runtimeCompiler": true,
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@antv/data-set": "^0.11.4",
+    "@antv/g2": "^4.0.12",
+    "@antv/l7": "^2.2.11",
+    "@antv/l7-district": "^2.2.11",
+    "@antv/l7-maps": "^2.2.11",
+    "ant-design-vue": "^1.6.2",
+    "axios": "^0.19.2",
+    "core-js": "^3.6.5",
+    "moment": "^2.27.0",
+    "npm": "^6.14.5",
+    "start": "^5.1.0",
+    "v-charts": "^1.19.0",
+    "vcc-validate": "^1.0.9-beta.2",
+    "vue": "^2.6.11",
+    "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.7.0",
+    "vue-google-adsense": "^1.8.1",
+    "vue-router": "^3.3.2 ",
+    "vue-script2": "^2.1.0",
+    "vuex": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-router": "~4.4.0",
+    "@vue/cli-plugin-unit-mocha": "~4.4.0",
+    "@vue/cli-plugin-vuex": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "@vue/test-utils": "^1.0.3",
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.1.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "json-server": "^0.16.1",
+    "mockjs": "^1.1.0",
+    "reqwest": "^2.0.5",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vant": "^2.9.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "mocha": true
+        }
+      }
+    ]
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
