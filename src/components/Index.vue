@@ -8,9 +8,19 @@
         <a-layout>
             <a-layout-sider style="background: #fff;margin-top: 1%">
                 <a-menu mode="inline" :style="{ height: '100%', borderRight: 0 }">
-                    <a-menu-item>任务列表</a-menu-item>
-                    <a-menu-item>数据源</a-menu-item>
-                    <a-menu-item>计算力</a-menu-item>
+                    <a-menu-item>
+                        <router-link to="/taskList">任务列表</router-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                        <router-link to="/originList">
+                            数据源
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                        <router-link to="/powerList">
+                            计算力
+                        </router-link>
+                    </a-menu-item>
                 </a-menu>
             </a-layout-sider>
             <router-view></router-view>

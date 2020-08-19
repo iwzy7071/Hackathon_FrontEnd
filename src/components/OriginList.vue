@@ -1,0 +1,75 @@
+<template>
+    <a-layout style="padding: 0 24px 24px">
+        <a-breadcrumb style="margin: 16px 0">
+            <a-breadcrumb-item>数据源列表</a-breadcrumb-item>
+        </a-breadcrumb>
+        <a-card>
+            <a-layout-content>
+                <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+                         :columns="originColumn"
+                         rowKey="id"
+                         style="margin-top: 15px"
+                         :data-source="originList">
+                </a-table>
+            </a-layout-content>
+        </a-card>
+    </a-layout>
+</template>
+<script>
+    export default {
+        data() {
+            return {
+                originList: [],
+                originColumn: [
+                    {
+                        title: '源ID',
+                        dataIndex: 'id',
+                        key: 'id',
+                    },
+                    {
+                        title: '源名称',
+                        dataIndex: 'name',
+                        key: 'name',
+                        ellipsis: true,
+                    },
+                    {
+                        title: '源描述',
+                        dataIndex: 'desc',
+                        key: 'desc',
+                        ellipsis: true,
+                    },
+                    {
+                        title: '源提供者',
+                        dataIndex: 'provider',
+                        key: 'provider',
+                        ellipsis: true,
+                    },
+                    {
+                        title: '源地址',
+                        dataIndex: 'addr',
+                        key: 'addr',
+                        ellipsis: true,
+                    },
+                ],
+                selectedRowKeys: [],
+            };
+        },
+        mounted() {
+            this.getOriginList();
+        },
+        methods: {
+            getOriginList() {
+                let $this = this;
+                let param = new URLSearchParams();
+                $this.$api.OriginList.getOriginList(param).then(function (response) {
+                    let data = response.data;
+                    $this.originList = data;
+                })
+            },
+            onSelectChange(selectedRowKeys, selectedRows) {
+                this.selectedRowKeys = selectedRowKeys;
+                this.$store.commit('setOriginList', selectedRows);
+            },
+        }
+    };
+</script>
