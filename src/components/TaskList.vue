@@ -11,53 +11,16 @@
                 <a-form-item label="任务描述">
                     <a-input v-decorator="['desc', { rules: [{ required: true, message: '请输入任务描述' }] }]"/>
                 </a-form-item>
-                <a-form-item label="上传训练脚本文件">
-                    <div class="dropbox">
-                        <a-upload-dragger name="file" :multiple="true"
-                                          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                          :headers="headers" @change="uploadChange">
-                            <p class="ant-upload-drag-icon">
-                                <a-icon type="inbox"/>
-                            </p>
-                            <p class="ant-upload-text">
-                                Click or drag file to this area to upload
-                            </p>
-                        </a-upload-dragger>
-                    </div>
-                </a-form-item>
-                <a-form-item label="数据源列表">
-                    <a-table
-                            :columns="originColumn"
-                            rowKey="id"
-                            style="margin-top: 15px"
-                            :data-source="originList">
-                        <div slot="action" href="javascript:" slot-scope="record">
-                            <a-button type="primary" @click="deleteOrigin(record)">删除</a-button>
-                        </div>
-                    </a-table>
-                </a-form-item>
-                <a-form-item label="计算力列表">
-                    <a-table
-                            :columns="powerColumn"
-                            rowKey="id"
-                            style="margin-top: 15px"
-                            :data-source="powerList">
-                        <div slot="action" href="javascript:" slot-scope="record">
-                            <a-button type="primary" @click="deletePower(record)">删除</a-button>
-                        </div>
-                    </a-table>
-                </a-form-item>
             </a-form>
         </a-modal>
         <a-card>
             <a-button type="primary" style="float:right" @click="showAddTask">新建任务</a-button>
             <a-layout-content :style="{marginTop:'5%'}">
-                <!--                <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"-->
-                <a-table
-                        :columns="TaskColumn"
-                        rowKey="id"
-                        style="margin-top: 15px"
-                        :data-source="taskList">
+                <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+                         :columns="TaskColumn"
+                         rowKey="id"
+                         style="margin-top: 15px"
+                         :data-source="taskList">
                     <div slot="action" href="javascript:" slot-scope="record">
                         <a-button type="primary" @click="taskDetail(record)">详情</a-button>
                     </div>
@@ -68,35 +31,12 @@
 </template>
 <script>
     export default {
+        inject: ['reload'],
         data() {
             return {
                 taskList: [],
                 originList: [],
                 powerList: [],
-                originColumn: [
-                    {
-                        title: '源ID',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    {
-                        title: '源描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '源地址',
-                        dataIndex: 'addr',
-                        key: 'addr',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        scopedSlots: {customRender: 'action'},
-                    },
-                ],
                 TaskColumn: [
                     {
                         title: '任务ID',
@@ -145,30 +85,6 @@
                         scopedSlots: {customRender: 'action'},
                     },
                 ],
-                powerColumn: [
-                    {
-                        title: 'ID',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    {
-                        title: '描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '地址',
-                        dataIndex: 'addr',
-                        key: 'addr',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        scopedSlots: {customRender: 'action'},
-                    },
-                ],
                 selectedRowKeys: [],
                 selectedTask: '',
                 add_task_visible: false,
@@ -188,14 +104,14 @@
                     $this.taskList = data;
                 })
             },
-            // onSelectChange(selectedRowKeys) {
-            //     if (selectedRowKeys.length > 1) {
-            //         this.selectedTask = selectedRowKeys[1];
-            //     } else {
-            //         this.selectedTask = selectedRowKeys[0];
-            //     }
-            //     this.selectedRowKeys = [this.selectedTask];
-            // },
+            onSelectChange(selectedRowKeys) {
+                if (selectedRowKeys.length > 1) {
+                    this.selectedTask = selectedRowKeys[1];
+                } else {
+                    this.selectedTask = selectedRowKeys[0];
+                }
+                this.selectedRowKeys = [this.selectedTask];
+            },
             taskDetail(record) {
                 this.$router.push({
                     path: `/taskDetail/ + ${record.id}`,
@@ -213,39 +129,22 @@
                         param.append('desc', values.desc);
                         $this.$api.TaskList.submitNewTask(param).then(function (response) {
                             let data = response.data;
-                            $this.taskList = data;
+                            let state = data.state;
+                            let id = data.id;
+                            if (state === true) {
+                                $this.$message.info("创建任务" + id + "成功");
+                            } else {
+                                $this.$message.warning("创建任务失败");
+                            }
                         })
                         this.add_task_visible = false;
+                        $this.reload();
                     }
                 });
             },
             showAddTask() {
                 this.add_task_visible = true;
-                this.powerList = this.$store.getters.getPowerList;
-                this.originList = this.$store.getters.getOriginList;
-            },
-            finishLaunchTask() {
-                console.log(this.launchTaskForm);
-            },
-            uploadChange(info) {
-                const status = info.file.status;
-                if (status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (status === 'done') {
-                    this.$message.success(`${info.file.name} 文件上传成功。`);
-                } else if (status === 'error') {
-                    this.$message.error(`${info.file.name} 文件上传失败。`);
-                }
-            },
-            deletePower(record) {
-                let index = this.powerList.indexOf(record);
-                this.powerList.splice(index, 1);
-            },
-            deleteOrigin(record) {
-                let index = this.originList.indexOf(record);
-                this.originList.splice(index, 1);
-            },
+            }
         }
     };
 </script>

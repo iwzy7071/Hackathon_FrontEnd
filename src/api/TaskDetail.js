@@ -2,8 +2,11 @@ import base from './base'
 import axios from '@/utils/http'
 
 const TaskDetail = {
-    getTaskDetail(params) {
+    getMonitor(params) {
         return axios.get(`${base.product}/getMonitor`, params)
+    },
+    launchNewTask(params) {
+        return axios.post(`${base.product}/launchTask`, params)
     }
 }
 
