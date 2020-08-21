@@ -9,8 +9,14 @@
                 <a-descriptions-item label="训练轮数">{{train.currentRound+`/`+train.totalRound}}</a-descriptions-item>
                 <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
             </a-descriptions>
-            <a-descriptions title="损失值概览"></a-descriptions>
-            <a-descriptions title="评估值概览"></a-descriptions>
+            <a-descriptions>
+                <a-descriptions-item label="损失函数图">
+                    <div id="lossGraph"></div>
+                </a-descriptions-item>
+                <a-descriptions-item v-for="(item,index) in this.metrics" :key="index" :label="item.name">
+                    <div :id="item.name"></div>
+                </a-descriptions-item>
+            </a-descriptions>
         </a-layout-content>
     </a-layout>
 </template>
@@ -23,11 +29,15 @@
                 collapsed: false,
                 task: {},
                 train: {},
+                metrics: [],
             };
         },
         mounted() {
             this.task = this.$route.query.data;
             this.getTaskDetail(this.task.id);
+        },
+        updated() {
+            this.showMetricGraph();
         },
         methods: {
             getTaskDetail(id) {
@@ -38,7 +48,7 @@
                     let data = response.data;
                     $this.train = data;
                     $this.showLossGraph();
-                    $this.showMetricGraph();
+                    $this.metrics = $this.train.metrics;
                 })
             },
             showLossGraph() {
@@ -46,10 +56,14 @@
                 const chart = new Chart({
                     container: 'lossGraph',
                     autoFit: true,
-                    width: 500,
-                    height: 300,
+                    width: 200,
+                    height: 200,
                 });
                 chart.data(data);
+                chart.scale({
+                    round: {range: [0, 30],},
+                    loss: {min: 0, max: 10, nice: true,},
+                });
                 chart.tooltip({
                     showCrosshairs: true,
                     shared: true,
@@ -59,21 +73,28 @@
                 chart.render();
             },
             showMetricGraph() {
-                const data = this.train.loss;
-                const chart = new Chart({
-                    container: 'metricGraph',
-                    autoFit: true,
-                    width: 300,
-                    height: 300,
-                });
-                chart.data(data);
-                chart.tooltip({
-                    showCrosshairs: true,
-                    shared: true,
-                });
-                chart.line().position('round*loss');
-                chart.point().position('round*loss');
-                chart.render();
+                for (let index in this.metrics) {
+                    let item = this.metrics[index];
+                    const data = item.metric;
+                    const chart = new Chart({
+                        container: item.name,
+                        autoFit: true,
+                        width: 200,
+                        height: 200,
+                    });
+                    chart.data(data);
+                    chart.scale({
+                        round: {range: [0, 30],},
+                        metric: {min: 0, max: 10, nice: true,},
+                    });
+                    chart.tooltip({
+                        showCrosshairs: true,
+                        shared: true,
+                    });
+                    chart.line().position('round*metric');
+                    chart.point().position('round*metric');
+                    chart.render();
+                }
             },
             deletePower(record) {
                 let index = this.powerList.indexOf(record);
