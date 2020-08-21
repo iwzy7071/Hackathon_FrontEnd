@@ -13,9 +13,8 @@
             <a-form>
                 <a-form-item label="上传训练脚本文件">
                     <div class="dropbox">
-                        <a-upload-dragger name="file" :multiple="true"
-                                          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                          @change="uploadChange">
+                        <a-upload-dragger name="file" :multiple="false" :fileList="uploadFiles"
+                                          :customRequest="UploadTrainFileRequest">
                             <p class="ant-upload-drag-icon">
                                 <a-icon type="inbox"/>
                             </p>
@@ -113,6 +112,7 @@
                 uploadHeader: '',
                 originList: [],
                 powerList: [],
+                uploadFiles: [],
                 monitor_button: true,
                 launch_button: false,
             };
@@ -145,6 +145,10 @@
             finishLaunchTask() {
                 let $this = this;
                 let param = new URLSearchParams();
+                if ($this.uploadFiles.length === 0) {
+                    $this.$message.warning("请先上传训练脚本文件");
+                    return;
+                }
                 param.append('id', this.task.id);
                 let powerList = [];
                 let originList = [];
@@ -156,9 +160,9 @@
                 }
                 param.append('powerList', powerList);
                 param.append('originList', originList);
+                param.append('file', $this.uploadFiles[0].uid);
                 $this.$api.TaskDetail.launchNewTask(param).then(function (response) {
                     let data = response.data;
-                    console.log(data);
                     let state = data.state;
                     if (state === true) {
                         $this.$message.info("启动任务成功");
@@ -175,7 +179,25 @@
                         data: this.task.id,
                     }
                 });
+            },
+            UploadTrainFileRequest(data) {
+                let $this = this;
+                let formData = new FormData();
+                formData.append('file', data.file);
+                formData.append('id', $this.task.id);
+                $this.$api.TaskDetail.uploadFile(formData).then(function (response) {
+                    if (response.code === 0) {
+                        let file = $this.fileFormatter(response.data);
+                        $this.uploadFiles = [file];
+                    } else {
+                        $this.$message.error("上传文件失败");
+                    }
+                });
             }
-        }
+        },
+        fileFormatter(data) {
+            let file = {uid: data.uuid, name: data.name, status: 'done', response: '{"status": "success"}',};
+            return file;
+        },
     };
 </script>

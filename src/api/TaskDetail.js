@@ -7,7 +7,10 @@ const TaskDetail = {
     },
     launchNewTask(params) {
         return axios.post(`${base.product}/launchTask`, params)
-    }
-}
+    },
+    uploadFile(params) {
+        return axios.post(`${base.product}/submitTaskFile`, params)
+    },
+};
 
 export default TaskDetail;

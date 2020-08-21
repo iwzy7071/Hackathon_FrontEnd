@@ -1,7 +1,7 @@
 <template>
     <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
-            <a-breadcrumb-item>训练列表</a-breadcrumb-item>
+            <a-breadcrumb-item>任务列表</a-breadcrumb-item>
         </a-breadcrumb>
         <a-modal v-model="add_task_visible" title="新建任务" @ok="finishAddTask">
             <a-form :form="launchTaskForm">
@@ -104,6 +104,16 @@
                     $this.taskList = data;
                 })
             },
+            getTaskSelected(id) {
+                let param = new URLSearchParams();
+                let $this = this;
+                param.append('id', id);
+                this.$api.TaskList.getTaskSelected(param).then(function (response) {
+                    let data = response.data;
+                    $this.$store.commit('setOriginList', data.originList);
+                    $this.$store.commit('setPowerList', data.powerList);
+                });
+            },
             onSelectChange(selectedRowKeys) {
                 if (selectedRowKeys.length > 1) {
                     this.selectedTask = selectedRowKeys[1];
@@ -111,6 +121,7 @@
                     this.selectedTask = selectedRowKeys[0];
                 }
                 this.selectedRowKeys = [this.selectedTask];
+                this.getTaskSelected(this.selectedTask);
             },
             taskDetail(record) {
                 this.$router.push({

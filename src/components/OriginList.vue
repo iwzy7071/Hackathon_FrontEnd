@@ -64,7 +64,17 @@
                 $this.$api.OriginList.getOriginList(param).then(function (response) {
                     let data = response.data;
                     $this.originList = data;
-                })
+                    $this.selectedRowKeys = $this.$store.getters.getOriginList;
+                    $this.originList.sort(function (a, b) {
+                        if (a.id in $this.selectedRowKeys && b.id in $this.selectedRowKeys)
+                            return a.id < b.id;
+                        if (a.id in $this.selectedRowKeys)
+                            return true;
+                        if (b.id in $this.selectedRowKeys)
+                            return false;
+                        return a.id < b.id;
+                    });
+                });
             },
             onSelectChange(selectedRowKeys, selectedRows) {
                 this.selectedRowKeys = selectedRowKeys;

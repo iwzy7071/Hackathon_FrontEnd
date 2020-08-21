@@ -7,6 +7,9 @@ const TaskList = {
     },
     submitNewTask(params) {
         return axios.post(`${base.product}/submitTask`, params)
+    },
+    getTaskSelected(params) {
+        return axios.get(`${base.product}/getTaskSelected`, params)
     }
 }
 
