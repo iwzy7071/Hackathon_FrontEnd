@@ -110,8 +110,8 @@
                 param.append('id', id);
                 this.$api.TaskList.getTaskSelected(param).then(function (response) {
                     let data = response.data;
-                    $this.$store.commit('setOriginList', data.originList);
-                    $this.$store.commit('setPowerList', data.powerList);
+                    $this.$store.commit('setOriginList', data.data_providers);
+                    $this.$store.commit('setPowerList', data.comp_providers);
                 });
             },
             onSelectChange(selectedRowKeys) {
@@ -148,7 +148,7 @@
                                 $this.$message.warning("创建任务失败");
                             }
                         })
-                        this.add_task_visible = false;
+                        $this.add_task_visible = false;
                         $this.reload();
                     }
                 });
