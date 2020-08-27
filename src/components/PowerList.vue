@@ -5,12 +5,14 @@
         </a-breadcrumb>
         <a-card>
             <a-layout-content>
-                <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-                         :columns="powerColumn"
-                         rowKey="id"
-                         style="margin-top: 15px"
-                         :data-source="powerList">
-                </a-table>
+                <a-spin :spinning="table_spinning">
+                    <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+                             :columns="powerColumn"
+                             rowKey="id"
+                             style="margin-top: 15px"
+                             :data-source="powerList">
+                    </a-table>
+                </a-spin>
             </a-layout-content>
         </a-card>
     </a-layout>
@@ -52,9 +54,10 @@
                     },
                 ],
                 selectedRowKeys: [],
+                table_spinning: true,
             };
         },
-        mounted() {
+        beforeMount() {
             this.getPowerList();
         },
         methods: {
@@ -74,6 +77,7 @@
                             return false;
                         return a.id < b.id;
                     });
+                    $this.table_spinning = false;
                 });
             },
             onSelectChange(selectedRowKeys, selectedRows) {

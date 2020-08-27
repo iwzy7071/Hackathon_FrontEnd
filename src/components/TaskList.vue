@@ -16,15 +16,17 @@
         <a-card>
             <a-button type="primary" style="float:right" @click="showAddTask">新建任务</a-button>
             <a-layout-content :style="{marginTop:'5%'}">
-                <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-                         :columns="TaskColumn"
-                         rowKey="task_id"
-                         style="margin-top: 15px"
-                         :data-source="taskList">
-                    <div slot="action" href="javascript:" slot-scope="record">
-                        <a-button type="primary" @click="taskDetail(record)">详情</a-button>
-                    </div>
-                </a-table>
+                <a-spin :spinning="task_spinning">
+                    <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+                             :columns="TaskColumn"
+                             rowKey="task_id"
+                             style="margin-top: 15px"
+                             :data-source="taskList">
+                        <div slot="action" href="javascript:" slot-scope="record">
+                            <a-button type="primary" @click="taskDetail(record)">详情</a-button>
+                        </div>
+                    </a-table>
+                </a-spin>
             </a-layout-content>
         </a-card>
     </a-layout>
@@ -90,9 +92,10 @@
                 add_task_visible: false,
                 launchTaskForm: this.$form.createForm(this, {name: 'launchTaskForm'}),
                 headers: {authorization: 'authorization-text',},
+                task_spinning: true,
             };
         },
-        mounted() {
+        beforeMount() {
             this.getTaskList();
         },
         methods: {
@@ -102,6 +105,7 @@
                 $this.$api.TaskList.getTaskList(param).then(function (response) {
                     let data = response.data;
                     $this.taskList = data;
+                    $this.task_spinning = false;
                 })
             },
             getTaskSelected(id) {

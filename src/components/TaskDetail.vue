@@ -6,7 +6,7 @@
         </a-breadcrumb>
         <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
             <a-descriptions title="任务概览">
-                <a-descriptions-item label="任务ID">{{task.id}}</a-descriptions-item>
+                <a-descriptions-item label="任务ID">{{task.task_id}}</a-descriptions-item>
                 <a-descriptions-item label="任务名称">{{task.name}}</a-descriptions-item>
                 <a-descriptions-item label="任务描述">{{task.desc}}</a-descriptions-item>
             </a-descriptions>
