@@ -3,13 +3,13 @@ import axios from '@/utils/http'
 
 const TaskDetail = {
     getMonitor(params) {
-        return axios.get(`${base.product}/getMonitor`, params)
+        return axios.get(`${base.develop}/getMonitor`, params)
     },
     launchNewTask(params) {
-        return axios.post(`${base.product}/launchTask`, params)
+        return axios.post(`${base.develop}/launchTask`, params)
     },
     uploadFile(params) {
-        return axios.post(`${base.product}/submitTaskFile`, params)
+        return axios.post(`${base.develop}/submitTaskFile`, params)
     },
 };
 

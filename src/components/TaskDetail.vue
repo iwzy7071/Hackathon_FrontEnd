@@ -158,8 +158,8 @@
                 for (let origin in this.originList) {
                     originList.push(origin.id);
                 }
-                param.append('powerList', powerList);
-                param.append('originList', originList);
+                param.append('computation_providers', powerList);
+                param.append('data_sources', originList);
                 param.append('file', $this.uploadFiles[0].uid);
                 $this.$api.TaskDetail.launchNewTask(param).then(function (response) {
                     let data = response.data;

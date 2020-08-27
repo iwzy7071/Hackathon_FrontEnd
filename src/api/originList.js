@@ -5,6 +5,6 @@ const OriginList = {
     getOriginList(params) {
         return axios.get(`${base.product}/dataSources`, params)
     },
-}
+};
 
 export default OriginList

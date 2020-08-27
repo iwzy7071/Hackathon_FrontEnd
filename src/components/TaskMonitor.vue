@@ -6,7 +6,7 @@
         </a-breadcrumb>
         <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
             <a-descriptions>
-                <a-descriptions-item label="训练轮数">{{train.currentRound+`/`+train.totalRound}}</a-descriptions-item>
+                <a-descriptions-item label="训练轮数">{{train.currentRound+`/`+train.totalRounds}}</a-descriptions-item>
                 <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
             </a-descriptions>
             <a-descriptions>
@@ -75,7 +75,7 @@
             showMetricGraph() {
                 for (let index in this.metrics) {
                     let item = this.metrics[index];
-                    const data = item.metric;
+                    const data = item.values;
                     const chart = new Chart({
                         container: item.name,
                         autoFit: true,

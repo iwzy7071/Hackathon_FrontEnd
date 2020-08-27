@@ -18,7 +18,7 @@
             <a-layout-content :style="{marginTop:'5%'}">
                 <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
                          :columns="TaskColumn"
-                         rowKey="id"
+                         rowKey="task_id"
                          style="margin-top: 15px"
                          :data-source="taskList">
                     <div slot="action" href="javascript:" slot-scope="record">
@@ -40,8 +40,8 @@
                 TaskColumn: [
                     {
                         title: '任务ID',
-                        dataIndex: 'id',
-                        key: 'id',
+                        dataIndex: 'task_id',
+                        key: 'task_id',
                     },
                     {
                         title: '任务名称',
@@ -69,14 +69,14 @@
                     },
                     {
                         title: '创建时间',
-                        dataIndex: 'createTime',
-                        key: 'createTime',
+                        dataIndex: 'start_time',
+                        key: 'start_time',
                         ellipsis: true,
                     },
                     {
                         title: '完成时间',
-                        dataIndex: 'deadTime',
-                        key: 'deadTime',
+                        dataIndex: 'finish_time',
+                        key: 'finish_time',
                         ellipsis: true,
                     },
                     {
