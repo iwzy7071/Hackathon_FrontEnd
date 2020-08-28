@@ -1,8 +1,5 @@
 <template>
     <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
-            <a-breadcrumb-item>任务列表</a-breadcrumb-item>
-        </a-breadcrumb>
         <a-modal v-model="add_task_visible" title="新建任务" @ok="finishAddTask">
             <a-form :form="launchTaskForm">
                 <a-form-item label="任务名称">
@@ -13,8 +10,11 @@
                 </a-form-item>
             </a-form>
         </a-modal>
-        <a-card>
+        <a-card style="margin: 16px 0;">
             <a-button type="primary" style="float:right" @click="showAddTask">新建任务</a-button>
+            <a-breadcrumb>
+                <a-breadcrumb-item>任务列表</a-breadcrumb-item>
+            </a-breadcrumb>
             <a-layout-content :style="{marginTop:'5%'}">
                 <a-spin :spinning="task_spinning">
                     <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"

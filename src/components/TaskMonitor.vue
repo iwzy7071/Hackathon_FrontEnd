@@ -4,7 +4,12 @@
             <a-breadcrumb-item>训练列表</a-breadcrumb-item>
             <a-breadcrumb-item>任务详情</a-breadcrumb-item>
         </a-breadcrumb>
-        <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+        <a-tabs default-active-key="3" @change="tabChange">
+            <a-tab-pane key="1" tab="总览"></a-tab-pane>
+            <a-tab-pane key="2" tab="IDE"></a-tab-pane>
+            <a-tab-pane key="3" tab="训练监测"></a-tab-pane>
+        </a-tabs>
+        <a-card>
             <a-descriptions>
                 <a-descriptions-item label="训练轮数">{{train.currentRound+`/`+train.totalRounds}}</a-descriptions-item>
                 <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
@@ -17,7 +22,7 @@
                     <div :id="item.name"></div>
                 </a-descriptions-item>
             </a-descriptions>
-        </a-layout-content>
+        </a-card>
     </a-layout>
 </template>
 <script>
@@ -34,7 +39,8 @@
         },
         mounted() {
             this.task = this.$route.query.data;
-            this.getTaskDetail(this.task.id);
+            console.log(this.task);
+            this.getTaskDetail(this.task.task_id);
         },
         updated() {
             this.showMetricGraph();
@@ -96,46 +102,24 @@
                     chart.render();
                 }
             },
-            deletePower(record) {
-                let index = this.powerList.indexOf(record);
-                this.powerList.splice(index, 1);
-            },
-            deleteOrigin(record) {
-                let index = this.originList.indexOf(record);
-                this.originList.splice(index, 1);
-            },
-            uploadChange(info) {
-                const status = info.file.status;
-                if (status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (status === 'done') {
-                    this.$message.success(`${info.file.name} 文件上传成功。`);
-                } else if (status === 'error') {
-                    this.$message.error(`${info.file.name} 文件上传失败。`);
-                }
-            },
-            finishLaunchTask() {
+            tabChange(key) {
                 let $this = this;
-                this.launchTaskForm.validateFields((err, values) => {
-                    if (!err) {
-                        let param = new URLSearchParams();
-                        param.append('name', values.name);
-                        param.append('desc', values.desc);
-                        $this.$api.TaskList.submitNewTask(param).then(function (response) {
-                            let data = response.data;
-                            let state = data.state;
-                            let id = data.id;
-                            if (state === true) {
-                                $this.$message.info("创建任务" + id + "成功");
-                            } else {
-                                $this.$message.warning("创建任务" + id + "成功");
-                            }
-                        })
-                        this.add_task_visible = false;
-                        $this.reload();
-                    }
-                });
+                if (key === 1) {
+                    $this.$router.push({
+                        path: `/taskDetail/ + ${$this.task.id}`,
+                        query: {data: $this.task,}
+                    });
+                } else if (key === 2) {
+                    $this.$router.push({
+                        path: `/taskEditor/ + ${$this.task.id}`,
+                        query: {data: $this.task,}
+                    });
+                } else {
+                    $this.$router.push({
+                        path: `/taskMonitor/ + ${$this.task.id}`,
+                        query: {data: $this.task.id,}
+                    });
+                }
             },
         }
     };

@@ -1,9 +1,9 @@
 <template>
     <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
-            <a-breadcrumb-item>数据源列表</a-breadcrumb-item>
-        </a-breadcrumb>
-        <a-card>
+        <a-card style="margin: 16px 0">
+            <a-breadcrumb>
+                <a-breadcrumb-item>数据源列表</a-breadcrumb-item>
+            </a-breadcrumb>
             <a-layout-content>
                 <a-spin :spinning="table_spinning">
                     <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"

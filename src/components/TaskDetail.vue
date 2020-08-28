@@ -4,8 +4,13 @@
             <a-breadcrumb-item>训练列表</a-breadcrumb-item>
             <a-breadcrumb-item>任务详情</a-breadcrumb-item>
         </a-breadcrumb>
-        <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
-            <a-descriptions title="任务概览">
+        <a-tabs default-active-key="1" @change="tabChange">
+            <a-tab-pane key="1" tab="总览"></a-tab-pane>
+            <a-tab-pane key="2" tab="IDE"></a-tab-pane>
+            <a-tab-pane key="3" tab="训练监测"></a-tab-pane>
+        </a-tabs>
+        <a-card>
+            <a-descriptions>
                 <a-descriptions-item label="任务ID">{{task.task_id}}</a-descriptions-item>
                 <a-descriptions-item label="任务名称">{{task.name}}</a-descriptions-item>
                 <a-descriptions-item label="任务描述">{{task.desc}}</a-descriptions-item>
@@ -46,12 +51,10 @@
                     </a-table>
                 </a-descriptions-item>
             </a-descriptions>
-            <a-button type="primary" style="float:right" @click="NavigateMonitorTask" :disabled="monitor_button">训练监测
-            </a-button>
-            <a-button type="primary" style="float:right;margin-right: 2%" @click="finishLaunchTask"
+            <a-button type="primary" style="float:right" @click="finishLaunchTask"
                       :disabled="launch_button">开始任务
             </a-button>
-        </a-layout-content>
+        </a-card>
     </a-layout>
 </template>
 <script>
@@ -172,14 +175,6 @@
                 });
                 this.monitor_button = false;
             },
-            NavigateMonitorTask() {
-                this.$router.push({
-                    path: `/taskMonitor/ + ${this.task.id}`,
-                    query: {
-                        data: this.task.id,
-                    }
-                });
-            },
             UploadTrainFileRequest(data) {
                 let $this = this;
                 let formData = new FormData();
@@ -193,11 +188,30 @@
                         $this.$message.error("上传文件失败");
                     }
                 });
-            }
-        },
-        fileFormatter(data) {
-            let file = {uid: data.uuid, name: data.name, status: 'done', response: '{"status": "success"}',};
-            return file;
+            },
+            fileFormatter(data) {
+                let file = {uid: data.uuid, name: data.name, status: 'done', response: '{"status": "success"}',};
+                return file;
+            },
+            tabChange(key) {
+                let $this = this;
+                if (key === 1) {
+                    $this.$router.push({
+                        path: `/taskDetail/ + ${$this.task.task_id}`,
+                        query: {data: $this.task,}
+                    });
+                } else if (key === 2) {
+                    $this.$router.push({
+                        path: `/taskEditor/ + ${$this.task.task_id}`,
+                        query: {data: $this.task,}
+                    });
+                } else {
+                    $this.$router.push({
+                        path: `/taskMonitor/ + ${$this.task.task_id}`,
+                        query: {data: $this.task,}
+                    });
+                }
+            },
         },
     };
 </script>

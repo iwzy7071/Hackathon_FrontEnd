@@ -6,6 +6,7 @@ import TaskDetail from "../components/TaskDetail";
 import OriginList from "../components/OriginList";
 import PowerList from "../components/PowerList";
 import TaskMonitor from "../components/TaskMonitor";
+import TaskEditor from "../components/TaskEditor";
 
 Vue.use(VueRouter);
 
@@ -52,9 +53,15 @@ const routes = [
             },
             {
                 path: '/taskMonitor/:id',
-                name: '训练监控',
+                name: '任务监控',
                 component: TaskMonitor,
-                meta: {title: '训练监控'}
+                meta: {title: '任务监控'}
+            },
+            {
+                path: '/taskEditor/:id',
+                name: '训练监控',
+                component: TaskEditor,
+                meta: {title: '任务编译器'}
             },
         ],
         meta: {title: '首页'}
