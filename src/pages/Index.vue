@@ -7,16 +7,16 @@
         </a-menu>
         <a-layout>
             <a-layout-sider style="background: #fff;margin-top: 1%">
-                <a-menu mode="inline" :style="{ height: '100%', borderRight: 0 }">
-                    <a-menu-item style="margin-top: 30%">
+                <a-menu mode="inline" :style="{ height: '100%', borderRight: 0 }" :default-selected-keys="['0']">
+                    <a-menu-item style="margin-top: 30%" key="0">
                         <router-link to="/taskList">任务列表</router-link>
                     </a-menu-item>
-                    <a-menu-item>
+                    <a-menu-item key="1">
                         <router-link to="/originList">
                             数据源
                         </router-link>
                     </a-menu-item>
-                    <a-menu-item>
+                    <a-menu-item key="2">
                         <router-link to="/powerList">
                             计算力
                         </router-link>

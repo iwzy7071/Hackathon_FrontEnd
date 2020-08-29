@@ -1,5 +1,5 @@
 <template>
-    <a-card style="border-color: #e7f6ff">
+    <a-card style="border-color: #e7f6ff;">
         <a-descriptions>
             <a-descriptions-item label="任务ID">{{task.task_id}}</a-descriptions-item>
             <a-descriptions-item label="任务名称">{{task.name}}</a-descriptions-item>

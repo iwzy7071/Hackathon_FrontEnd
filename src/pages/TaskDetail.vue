@@ -1,5 +1,5 @@
 <template>
-    <a-layout style="padding: 0 24px 24px;border-color: #e7f6ff">
+    <a-layout style="padding: 0 24px 24px;border-color: #e7f6ff" theme="light">
         <a-tabs default-active-key="1">
             <a-tab-pane key="1" tab="总览">
                 <taskDetail/>
