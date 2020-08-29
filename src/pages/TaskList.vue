@@ -10,7 +10,7 @@
                 </a-form-item>
             </a-form>
         </a-modal>
-        <a-card style="margin: 16px 0;">
+        <a-card style="margin-top: 5%;border-color: #e7f6ff">
             <a-button type="primary" style="float:right" @click="showAddTask">新建任务</a-button>
             <a-breadcrumb>
                 <a-breadcrumb-item>任务列表</a-breadcrumb-item>
@@ -129,7 +129,7 @@
             },
             taskDetail(record) {
                 this.$router.push({
-                    path: `/taskDetail/ + ${record.id}`,
+                    path: `/taskDetail/ + ${record.task_id}`,
                     query: {
                         data: record,
                     }

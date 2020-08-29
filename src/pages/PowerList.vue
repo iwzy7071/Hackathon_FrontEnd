@@ -1,16 +1,16 @@
 <template>
     <a-layout style="padding: 0 24px 24px">
-        <a-card style="margin: 16px 0">
+        <a-card style="margin-top: 5%;border-color: #e7f6ff">
             <a-breadcrumb>
-                <a-breadcrumb-item>数据源列表</a-breadcrumb-item>
+                <a-breadcrumb-item>计算力列表</a-breadcrumb-item>
             </a-breadcrumb>
             <a-layout-content>
                 <a-spin :spinning="table_spinning">
                     <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-                             :columns="originColumn"
+                             :columns="powerColumn"
                              rowKey="id"
                              style="margin-top: 15px"
-                             :data-source="originList">
+                             :data-source="powerList">
                     </a-table>
                 </a-spin>
             </a-layout-content>
@@ -21,33 +21,33 @@
     export default {
         data() {
             return {
-                originList: [],
-                originColumn: [
+                powerList: [],
+                powerColumn: [
                     {
-                        title: '源ID',
+                        title: 'ID',
                         dataIndex: 'id',
                         key: 'id',
                     },
                     {
-                        title: '源名称',
-                        dataIndex: 'name',
-                        key: 'name',
+                        title: '设备',
+                        dataIndex: 'device',
+                        key: 'device',
                         ellipsis: true,
                     },
                     {
-                        title: '源描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '源提供者',
+                        title: '提供方',
                         dataIndex: 'provider',
                         key: 'provider',
                         ellipsis: true,
                     },
                     {
-                        title: '源地址',
+                        title: '描述',
+                        dataIndex: 'desc',
+                        key: 'desc',
+                        ellipsis: true,
+                    },
+                    {
+                        title: '地址',
                         dataIndex: 'addr',
                         key: 'addr',
                         ellipsis: true,
@@ -58,17 +58,17 @@
             };
         },
         beforeMount() {
-            this.getOriginList();
+            this.getPowerList();
         },
         methods: {
-            getOriginList() {
+            getPowerList() {
                 let $this = this;
                 let param = new URLSearchParams();
-                $this.$api.OriginList.getOriginList(param).then(function (response) {
+                $this.$api.powerList.getPowerList(param).then(function (response) {
                     let data = response.data;
-                    $this.originList = data;
-                    $this.selectedRowKeys = $this.$store.getters.getOriginList;
-                    $this.originList.sort(function (a, b) {
+                    $this.powerList = data;
+                    $this.selectedRowKeys = $this.$store.getters.getPowerList;
+                    $this.powerList.sort(function (a, b) {
                         if (a.id in $this.selectedRowKeys && b.id in $this.selectedRowKeys)
                             return a.id < b.id;
                         if (a.id in $this.selectedRowKeys)
@@ -82,7 +82,7 @@
             },
             onSelectChange(selectedRowKeys, selectedRows) {
                 this.selectedRowKeys = selectedRowKeys;
-                this.$store.commit('setOriginList', selectedRows);
+                this.$store.commit('setPowerList', selectedRows);
             },
         }
     };

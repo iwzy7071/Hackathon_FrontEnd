@@ -1,63 +1,54 @@
 <template>
-    <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
-            <a-breadcrumb-item>训练列表</a-breadcrumb-item>
-            <a-breadcrumb-item>任务详情</a-breadcrumb-item>
-        </a-breadcrumb>
-        <a-tabs default-active-key="1" @change="tabChange">
-            <a-tab-pane key="1" tab="总览"></a-tab-pane>
-            <a-tab-pane key="2" tab="IDE"></a-tab-pane>
-            <a-tab-pane key="3" tab="训练监测"></a-tab-pane>
-        </a-tabs>
-        <a-card>
-            <a-descriptions>
-                <a-descriptions-item label="任务ID">{{task.task_id}}</a-descriptions-item>
-                <a-descriptions-item label="任务名称">{{task.name}}</a-descriptions-item>
-                <a-descriptions-item label="任务描述">{{task.desc}}</a-descriptions-item>
-            </a-descriptions>
-            <a-form>
-                <a-form-item label="上传训练脚本文件">
-                    <div class="dropbox">
-                        <a-upload-dragger name="file" :multiple="false" :fileList="uploadFiles"
-                                          :customRequest="UploadTrainFileRequest">
-                            <p class="ant-upload-drag-icon">
-                                <a-icon type="inbox"/>
-                            </p>
-                            <p class="ant-upload-text">
-                                Click or drag file to this area to upload
-                            </p>
-                        </a-upload-dragger>
+    <a-card style="border-color: #e7f6ff">
+        <a-descriptions>
+            <a-descriptions-item label="任务ID">{{task.task_id}}</a-descriptions-item>
+            <a-descriptions-item label="任务名称">{{task.name}}</a-descriptions-item>
+            <a-descriptions-item label="任务描述">{{task.desc}}</a-descriptions-item>
+        </a-descriptions>
+        <a-form>
+            <a-form-item label="上传训练脚本文件">
+                <div class="dropbox">
+                    <a-upload-dragger name="file" :multiple="false" :fileList="uploadFiles"
+                                      :customRequest="UploadTrainFileRequest">
+                        <p class="ant-upload-drag-icon">
+                            <a-icon type="inbox"/>
+                        </p>
+                        <p class="ant-upload-text">
+                            Click or drag file to this area to upload
+                        </p>
+                    </a-upload-dragger>
+                </div>
+            </a-form-item>
+            <img src="../../static/1.jpeg" style="width: 100%;height: auto"/>
+        </a-form>
+        <a-descriptions>
+            <a-descriptions-item label="数据源列表">
+                <a-table :columns="originColumn" rowKey="id" style="margin-top: 15px" :data-source="originList">
+                    <div slot="action" href="javascript:" slot-scope="record">
+                        <a-button type="primary" @click="deleteOrigin(record)">删除</a-button>
                     </div>
-                </a-form-item>
-            </a-form>
-            <a-descriptions>
-                <a-descriptions-item label="数据源列表">
-                    <a-table :columns="originColumn" rowKey="id" style="margin-top: 15px" :data-source="originList">
-                        <div slot="action" href="javascript:" slot-scope="record">
-                            <a-button type="primary" @click="deleteOrigin(record)">删除</a-button>
-                        </div>
-                    </a-table>
-                </a-descriptions-item>
-                <a-descriptions-item>
-                    <a-carousel arrows dots-class="slick-dots slick-thumb">
-                        <img src="/static/1.png"/>
-                    </a-carousel>
-                </a-descriptions-item>
-                <a-descriptions-item label="计算力列表">
-                    <a-table :columns="powerColumn" rowKey="id" style="margin-top: 15px" :data-source="powerList">
-                        <div slot="action" href="javascript:" slot-scope="record">
-                            <a-button type="primary" @click="deletePower(record)">删除</a-button>
-                        </div>
-                    </a-table>
-                </a-descriptions-item>
-            </a-descriptions>
-            <a-button type="primary" style="float:right" @click="finishLaunchTask"
-                      :disabled="launch_button">开始任务
-            </a-button>
-        </a-card>
-    </a-layout>
+                </a-table>
+            </a-descriptions-item>
+            <a-descriptions-item>
+                <a-carousel arrows dots-class="slick-dots slick-thumb">
+                    <img src="/static/1.png"/>
+                </a-carousel>
+            </a-descriptions-item>
+            <a-descriptions-item label="计算力列表">
+                <a-table :columns="powerColumn" rowKey="id" style="margin-top: 15px" :data-source="powerList">
+                    <div slot="action" href="javascript:" slot-scope="record">
+                        <a-button type="primary" @click="deletePower(record)">删除</a-button>
+                    </div>
+                </a-table>
+            </a-descriptions-item>
+        </a-descriptions>
+        <a-button type="primary" style="float:right" @click="finishLaunchTask"
+                  :disabled="launch_button">开始任务
+        </a-button>
+    </a-card>
 </template>
 <script>
+
     export default {
         data() {
             return {
@@ -195,19 +186,20 @@
             },
             tabChange(key) {
                 let $this = this;
+                console.log(key);
                 if (key === 1) {
                     $this.$router.push({
                         path: `/taskDetail/ + ${$this.task.task_id}`,
                         query: {data: $this.task,}
                     });
-                } else if (key === 2) {
-                    $this.$router.push({
-                        path: `/taskEditor/ + ${$this.task.task_id}`,
+                } else if (key === 3) {
+                    $this.$router.replace({
+                        path: `/taskMonitor/ + ${$this.task.task_id}`,
                         query: {data: $this.task,}
                     });
                 } else {
-                    $this.$router.push({
-                        path: `/taskMonitor/ + ${$this.task.task_id}`,
+                    $this.$router.replace({
+                        path: `/taskEditor/ + ${$this.task.task_id}`,
                         query: {data: $this.task,}
                     });
                 }

@@ -7,6 +7,7 @@ import 'ant-design-vue/dist/antd.css';
 import axios from 'axios'
 import api from './api'
 
+
 Vue.prototype.$api = api;
 
 Vue.config.productionTip = false;

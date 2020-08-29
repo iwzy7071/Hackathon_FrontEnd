@@ -1,29 +1,18 @@
 <template>
-    <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
-            <a-breadcrumb-item>训练列表</a-breadcrumb-item>
-            <a-breadcrumb-item>任务详情</a-breadcrumb-item>
-        </a-breadcrumb>
-        <a-tabs default-active-key="3" @change="tabChange">
-            <a-tab-pane key="1" tab="总览"></a-tab-pane>
-            <a-tab-pane key="2" tab="IDE"></a-tab-pane>
-            <a-tab-pane key="3" tab="训练监测"></a-tab-pane>
-        </a-tabs>
-        <a-card>
-            <a-descriptions>
-                <a-descriptions-item label="训练轮数">{{train.currentRound+`/`+train.totalRounds}}</a-descriptions-item>
-                <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
-            </a-descriptions>
-            <a-descriptions>
-                <a-descriptions-item label="损失函数图">
-                    <div id="lossGraph"></div>
-                </a-descriptions-item>
-                <a-descriptions-item v-for="(item,index) in this.metrics" :key="index" :label="item.name">
-                    <div :id="item.name"></div>
-                </a-descriptions-item>
-            </a-descriptions>
-        </a-card>
-    </a-layout>
+    <a-card style="border-color: #e7f6ff">
+        <a-descriptions>
+            <a-descriptions-item label="训练轮数">{{train.currentRound+`/`+train.totalRounds}}</a-descriptions-item>
+            <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
+        </a-descriptions>
+        <a-descriptions>
+            <a-descriptions-item label="损失函数图">
+                <div id="lossGraph"></div>
+            </a-descriptions-item>
+            <a-descriptions-item v-for="(item,index) in this.metrics" :key="index" :label="item.name">
+                <div :id="item.name"></div>
+            </a-descriptions-item>
+        </a-descriptions>
+    </a-card>
 </template>
 <script>
     import {Chart} from '@antv/g2';
@@ -104,20 +93,21 @@
             },
             tabChange(key) {
                 let $this = this;
+                console.log(key);
                 if (key === 1) {
-                    $this.$router.push({
-                        path: `/taskDetail/ + ${$this.task.id}`,
+                    $this.$router.replace({
+                        path: `/taskDetail/ + ${$this.task.task_id}`,
                         query: {data: $this.task,}
                     });
                 } else if (key === 2) {
-                    $this.$router.push({
-                        path: `/taskEditor/ + ${$this.task.id}`,
+                    $this.$router.replace({
+                        path: `/taskEditor/ + ${$this.task.task_id}`,
                         query: {data: $this.task,}
                     });
                 } else {
-                    $this.$router.push({
-                        path: `/taskMonitor/ + ${$this.task.id}`,
-                        query: {data: $this.task.id,}
+                    $this.$router.replace({
+                        path: `/taskMonitor/ + ${$this.task.task_id}`,
+                        query: {data: $this.task,}
                     });
                 }
             },

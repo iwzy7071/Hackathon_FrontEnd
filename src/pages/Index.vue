@@ -1,14 +1,14 @@
 <template>
     <a-layout style="min-height: 100%">
-        <a-menu theme="light" mode="horizontal" :style="{ lineHeight: '64px',width:'100%' }">
-            <a-menu-item>联邦数智平台</a-menu-item>
-            <a-menu-item :style="{float:'Right'}">退出</a-menu-item>
-            <a-menu-item :style="{float:'Right'}">admin</a-menu-item>
+        <a-menu mode="horizontal" :style="{'lineHeight': '64px','width':'100%'}"  theme="dark">
+            <a-menu-item style="font-size:large;padding-left: 5%" selectable="false">云间联邦数智平台</a-menu-item>
+            <a-menu-item :style="{float:'Right'}" selectable="false">退出</a-menu-item>
+            <a-menu-item :style="{float:'Right'}" selectable="false">admin</a-menu-item>
         </a-menu>
         <a-layout>
             <a-layout-sider style="background: #fff;margin-top: 1%">
                 <a-menu mode="inline" :style="{ height: '100%', borderRight: 0 }">
-                    <a-menu-item>
+                    <a-menu-item style="margin-top: 30%">
                         <router-link to="/taskList">任务列表</router-link>
                     </a-menu-item>
                     <a-menu-item>

@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from "../components/Index";
-import TaskList from "../components/TaskList";
-import TaskDetail from "../components/TaskDetail";
-import OriginList from "../components/OriginList";
-import PowerList from "../components/PowerList";
-import TaskMonitor from "../components/TaskMonitor";
-import TaskEditor from "../components/TaskEditor";
-
+import Index from "../pages/Index";
+import TaskList from "../pages/TaskList";
+import OriginList from "../pages/OriginList";
+import PowerList from "../pages/PowerList";
+import TaskDetail from "../pages/TaskDetail";
+import taskEditor from "../components/taskEditor";
 Vue.use(VueRouter);
 
 const originalPush = VueRouter.prototype.push;
@@ -52,16 +50,10 @@ const routes = [
                 meta: {title: '数据源列表'}
             },
             {
-                path: '/taskMonitor/:id',
-                name: '任务监控',
-                component: TaskMonitor,
-                meta: {title: '任务监控'}
-            },
-            {
-                path: '/taskEditor/:id',
-                name: '训练监控',
-                component: TaskEditor,
-                meta: {title: '任务编译器'}
+                path: '/test',
+                name: '数据源列表',
+                component: taskEditor,
+                meta: {title: '数据源列表'}
             },
         ],
         meta: {title: '首页'}
