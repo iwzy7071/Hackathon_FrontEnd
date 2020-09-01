@@ -2,7 +2,7 @@
     <a-layout style="padding: 0 24px 24px;border-color: #e7f6ff" theme="light">
         <a-tabs default-active-key="1">
             <a-tab-pane key="1" tab="总览">
-                <taskDetail/>
+                <taskDetail style="height: 100%;width: 100%"/>
             </a-tab-pane>
             <a-tab-pane key="2" tab="IDE">
                 <taskEditor/>
@@ -122,9 +122,9 @@
                 for (let origin in this.originList) {
                     originList.push(origin.id);
                 }
-                param.append('computation_providers', powerList);
-                param.append('data_sources', originList);
-                param.append('file', $this.uploadFiles[0].uid);
+                param.append('computation_providers', powerList.toString());
+                param.append('data_sources', originList.toString());
+                param.append('file_id', $this.uploadFiles[0].uid);
                 $this.$api.TaskDetail.launchNewTask(param).then(function (response) {
                     let data = response.data;
                     let state = data.state;

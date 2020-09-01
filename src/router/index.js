@@ -5,7 +5,6 @@ import TaskList from "../pages/TaskList";
 import OriginList from "../pages/OriginList";
 import PowerList from "../pages/PowerList";
 import TaskDetail from "../pages/TaskDetail";
-import taskEditor from "../components/taskEditor";
 Vue.use(VueRouter);
 
 const originalPush = VueRouter.prototype.push;
@@ -47,12 +46,6 @@ const routes = [
                 path: '/originList',
                 name: '数据源列表',
                 component: OriginList,
-                meta: {title: '数据源列表'}
-            },
-            {
-                path: '/test',
-                name: '数据源列表',
-                component: taskEditor,
                 meta: {title: '数据源列表'}
             },
         ],

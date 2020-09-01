@@ -19,7 +19,9 @@
                     </a-upload-dragger>
                 </div>
             </a-form-item>
-            <img src="../../static/1.jpeg" style="width: 100%;height: auto"/>
+            <a-form-item>
+                <img src="../../static/1.jpeg" style="width: 100%;height: auto"/>
+            </a-form-item>
         </a-form>
         <a-descriptions>
             <a-descriptions-item label="数据源列表">

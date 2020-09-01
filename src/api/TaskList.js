@@ -9,8 +9,8 @@ const TaskList = {
         return axios.post(`${base.product}/submitTask`, params)
     },
     getTaskSelected(params) {
-        return axios.get(`${base.develop}/getTask`, params)
+        return axios.get(`${base.product}/getTask`, params)
     }
-}
+};
 
 export default TaskList
