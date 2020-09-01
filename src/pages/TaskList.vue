@@ -88,7 +88,7 @@
                     },
                 ],
                 selectedRowKeys: [],
-                selectedTask: '',
+                selectedTask: undefined,
                 add_task_visible: false,
                 launchTaskForm: this.$form.createForm(this, {name: 'launchTaskForm'}),
                 headers: {authorization: 'authorization-text',},
@@ -97,6 +97,9 @@
         },
         beforeMount() {
             this.getTaskList();
+        },
+        mounted() {
+            this.selectedRowKeys = this.$store.getters.getTaskSelected;
         },
         methods: {
             getTaskList() {
@@ -114,7 +117,6 @@
                 param.append('id', id);
                 this.$api.TaskList.getTaskSelected(param).then(function (response) {
                     let data = response.data;
-                    console.log(data);
                     $this.$store.commit('setOriginList', data.data_providers);
                     $this.$store.commit('setPowerList', data.computation_providers);
                 });
@@ -122,10 +124,15 @@
             onSelectChange(selectedRowKeys) {
                 if (selectedRowKeys.length > 1) {
                     this.selectedTask = selectedRowKeys[1];
-                } else {
+                } else if (selectedRowKeys.length === 0) {
+                    this.selectedTask = undefined;
+                    this.$store.commit('setOriginList',[]);
+                    this.$store.commit('setPowerList', []);
+                }else{
                     this.selectedTask = selectedRowKeys[0];
                 }
                 this.selectedRowKeys = [this.selectedTask];
+                this.$store.commit('setTaskSelected', this.selectedRowKeys);
                 this.getTaskSelected(this.selectedTask);
             },
             taskDetail(record) {

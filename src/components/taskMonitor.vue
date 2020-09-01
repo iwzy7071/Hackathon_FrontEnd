@@ -5,10 +5,15 @@
             <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
         </a-descriptions>
         <a-descriptions>
-            <a-descriptions-item label="损失函数图">
+            <a-descriptions-item label="损失函数图" style="height: fit-content;width: fit-content">
                 <div id="lossGraph"></div>
             </a-descriptions-item>
-            <a-descriptions-item v-for="(item,index) in this.metrics" :key="index" :label="item.name">
+            <!--            <a-descriptions-item v-for="(item,index) in this.metrics" :key="index" :label="item.name">-->
+            <!--                <div :id="item.name"></div>-->
+            <!--            </a-descriptions-item>-->
+        </a-descriptions>
+        <a-descriptions v-for="(item,index) in this.metrics" :key="index">
+            <a-descriptions-item :label="item.name">
                 <div :id="item.name"></div>
             </a-descriptions-item>
         </a-descriptions>
@@ -28,7 +33,6 @@
         },
         mounted() {
             this.task = this.$route.query.data;
-            console.log(this.task);
             this.getTaskDetail(this.task.task_id);
         },
         updated() {
@@ -51,13 +55,12 @@
                 const chart = new Chart({
                     container: 'lossGraph',
                     autoFit: true,
-                    width: 200,
+                    width: 800,
                     height: 200,
                 });
                 chart.data(data);
                 chart.scale({
-                    round: {range: [0, 30],},
-                    loss: {min: 0, max: 10, nice: true,},
+                    loss: {min: 0, max: 1, nice: true,},
                 });
                 chart.tooltip({
                     showCrosshairs: true,
@@ -74,20 +77,19 @@
                     const chart = new Chart({
                         container: item.name,
                         autoFit: true,
-                        width: 200,
+                        width: 800,
                         height: 200,
                     });
                     chart.data(data);
                     chart.scale({
-                        round: {range: [0, 30],},
-                        metric: {min: 0, max: 10, nice: true,},
+                        value: {min: 0, max: 1, nice: true,},
                     });
                     chart.tooltip({
                         showCrosshairs: true,
                         shared: true,
                     });
-                    chart.line().position('round*metric');
-                    chart.point().position('round*metric');
+                    chart.line().position('round*value');
+                    chart.point().position('round*value');
                     chart.render();
                 }
             },

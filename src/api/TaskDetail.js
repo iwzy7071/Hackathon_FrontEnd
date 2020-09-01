@@ -3,7 +3,7 @@ import axios from '@/utils/http'
 
 const TaskDetail = {
     getMonitor(params) {
-        return axios.get(`${base.product}/getMonitor`, params)
+        return axios.get(`${base.product}/getMonitor`, {"params": params})
     },
     launchNewTask(params) {
         return axios.post(`${base.product}/launchTask`, params)
