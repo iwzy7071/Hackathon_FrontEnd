@@ -62,7 +62,7 @@
         },
         mounted() {
             let $this = this;
-            $this.task = this.$route.query.data;
+            this.task = this.$store.getters.getTask;
             $this.getConsole();
             let container = $this.$refs.container;
             $this.monacoEditor = monaco.editor.create(container, {
@@ -93,7 +93,7 @@
                     if(state === false)
                         $this.$message.warn("运行脚本失败");
                     else
-                        $this.$message.warn("运行脚本成功");
+                        $this.$message.info("运行脚本成功");
                 });
             },
             handleConsoleOnLoad() {

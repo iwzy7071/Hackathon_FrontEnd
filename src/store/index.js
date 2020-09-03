@@ -7,7 +7,8 @@ export default new Vuex.Store({
     state: {
         originList: [],
         powerList: [],
-        taskList:[],
+        taskList: [],
+        task: {},
     },
     mutations: {
         setOriginList(state, originList) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
         setTaskSelected(state, taskList) {
             state.taskList = taskList;
         },
+        setTask(state, task) {
+            state.task = task;
+        },
     },
     actions: {},
     modules: {},
@@ -26,5 +30,6 @@ export default new Vuex.Store({
         getOriginList: state => state.originList,
         getPowerList: state => state.powerList,
         getTaskSelected: state => state.taskList,
+        getTask: state => state.task,
     }
 })

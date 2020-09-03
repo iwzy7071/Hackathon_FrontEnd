@@ -126,9 +126,9 @@
                     this.selectedTask = selectedRowKeys[1];
                 } else if (selectedRowKeys.length === 0) {
                     this.selectedTask = undefined;
-                    this.$store.commit('setOriginList',[]);
+                    this.$store.commit('setOriginList', []);
                     this.$store.commit('setPowerList', []);
-                }else{
+                } else {
                     this.selectedTask = selectedRowKeys[0];
                 }
                 this.selectedRowKeys = [this.selectedTask];
@@ -136,12 +136,8 @@
                 this.getTaskSelected(this.selectedTask);
             },
             taskDetail(record) {
-                this.$router.push({
-                    path: `/taskDetail/ + ${record.task_id}`,
-                    query: {
-                        data: record,
-                    }
-                });
+                this.$store.commit('setTask', record);
+                this.$router.push({path: `/taskDetail`});
             },
             finishAddTask() {
                 let $this = this;

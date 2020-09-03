@@ -6,17 +6,16 @@
         </a-descriptions>
         <a-descriptions>
             <a-descriptions-item label="损失函数图" style="height: fit-content;width: fit-content">
-                <div id="lossGraph"></div>
-            </a-descriptions-item>
-            <!--            <a-descriptions-item v-for="(item,index) in this.metrics" :key="index" :label="item.name">-->
-            <!--                <div :id="item.name"></div>-->
-            <!--            </a-descriptions-item>-->
-        </a-descriptions>
-        <a-descriptions v-for="(item,index) in this.metrics" :key="index">
-            <a-descriptions-item :label="item.name">
-                <div :id="item.name"></div>
             </a-descriptions-item>
         </a-descriptions>
+        <div id="lossGraph"></div>
+        <div v-for="(item,index) in this.metrics" :key="index">
+            <a-descriptions>
+                <a-descriptions-item :label="item.name">
+                </a-descriptions-item>
+            </a-descriptions>
+            <div :id="item.name"></div>
+        </div>
     </a-card>
 </template>
 <script>
@@ -32,7 +31,7 @@
             };
         },
         mounted() {
-            this.task = this.$route.query.data;
+            this.task = this.$store.getters.getTask;
             this.getTaskDetail(this.task.task_id);
         },
         updated() {

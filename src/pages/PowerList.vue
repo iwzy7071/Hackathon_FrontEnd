@@ -67,7 +67,11 @@
                 $this.$api.powerList.getPowerList(param).then(function (response) {
                     let data = response.data;
                     $this.powerList = data;
-                    $this.selectedRowKeys = $this.$store.getters.getPowerList;
+                    let selectedPowerList = $this.$store.getters.getPowerList;
+                    for (let index in selectedPowerList) {
+                        let current = selectedPowerList[index];
+                        $this.selectedRowKeys.push(current.id);
+                    }
                     $this.powerList.sort(function (a, b) {
                         if (a.id in $this.selectedRowKeys && b.id in $this.selectedRowKeys)
                             return a.id < b.id;

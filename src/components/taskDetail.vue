@@ -114,9 +114,20 @@
             };
         },
         mounted() {
-            this.task = this.$route.query.data;
+            this.task = this.$store.getters.getTask;
             this.originList = this.$store.getters.getOriginList;
             this.powerList = this.$store.getters.getPowerList;
+
+            let $this = this;
+            let param = new URLSearchParams();
+            param.append('id', $this.task.task_id);
+            this.$api.TaskList.getTaskSelected(param).then(function (response) {
+                let data = response.data;
+                if($this.originList === [])
+                    $this.originList =  data.data_providers;
+                if($this.powerList === [])
+                    $this.powerList =  data.computation_providers;
+            });
         },
         methods: {
             deletePower(record) {

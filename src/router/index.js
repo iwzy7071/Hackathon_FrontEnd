@@ -31,7 +31,7 @@ const routes = [
                 meta: {title: '任务列表'}
             },
             {
-                path: '/taskDetail/:id',
+                path: '/taskDetail',
                 name: '任务详情',
                 component: TaskDetail,
                 meta: {title: '任务详情'}

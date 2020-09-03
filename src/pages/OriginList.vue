@@ -67,7 +67,11 @@
                 $this.$api.OriginList.getOriginList(param).then(function (response) {
                     let data = response.data;
                     $this.originList = data;
-                    $this.selectedRowKeys = $this.$store.getters.getOriginList;
+                    let selectedOriginList = $this.$store.getters.getOriginList;
+                    for (let index in selectedOriginList) {
+                        let current = selectedOriginList[index];
+                        $this.selectedRowKeys.push(current.id);
+                    }
                     $this.originList.sort(function (a, b) {
                         if (a.id in $this.selectedRowKeys && b.id in $this.selectedRowKeys)
                             return a.id < b.id;
