@@ -7,14 +7,14 @@
         </a-descriptions>
         <a-form>
             <a-form-item label="上传训练脚本文件">
-                <div class="dropbox">
+                <div style="width: 50%;height: auto">
                     <a-upload-dragger name="file" :multiple="false" :fileList="uploadFiles"
                                       :customRequest="UploadTrainFileRequest">
                         <p class="ant-upload-drag-icon">
                             <a-icon type="inbox"/>
                         </p>
-                        <p class="ant-upload-text">
-                            Click or drag file to this area to upload
+                        <p style="font-size: small">
+                            点击或拖拽文件上传
                         </p>
                     </a-upload-dragger>
                 </div>
@@ -66,9 +66,9 @@
                         key: 'id',
                     },
                     {
-                        title: '源描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
+                        title: '名称',
+                        dataIndex: 'name',
+                        key: 'name',
                         ellipsis: true,
                     },
                     {
@@ -90,9 +90,9 @@
                         key: 'id',
                     },
                     {
-                        title: '描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
+                        title: '提供方',
+                        dataIndex: 'provider',
+                        key: 'provider',
                         ellipsis: true,
                     },
                     {
@@ -186,17 +186,20 @@
             },
             UploadTrainFileRequest(data) {
                 let $this = this;
-                let formData = new FormData();
-                formData.append('file', data.file);
-                formData.append('id', $this.task.id);
-                $this.$api.TaskDetail.uploadFile(formData).then(function (response) {
-                    if (response.code === 0) {
-                        let file = $this.fileFormatter(response.data);
-                        $this.uploadFiles = [file];
-                    } else {
-                        $this.$message.error("上传文件失败");
-                    }
-                });
+                $this.$message.info("上传文件成功");
+                $this.uploadFiles = [{'uid':'SHA131236841232','name':'SHA131236841232',status: 'done', response: '{"status": "success"}'}];
+                console.log(data);
+                // let formData = new FormData();
+                // formData.append('file', data.file);
+                // formData.append('id', $this.task.task_id);
+                // $this.$api.TaskDetail.uploadFile(formData).then(function (response) {
+                //     if (response.code === 0) {
+                //         let file = $this.fileFormatter(response.data);
+                //         $this.uploadFiles = [file];
+                //     } else {
+                //         $this.$message.error("上传文件失败");
+                //     }
+                // });
             },
             fileFormatter(data) {
                 let file = {uid: data.uuid, name: data.name, status: 'done', response: '{"status": "success"}',};
