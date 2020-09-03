@@ -25,11 +25,13 @@
         </a-form>
         <a-descriptions>
             <a-descriptions-item label="数据源列表">
-                <a-table :columns="originColumn" rowKey="id" style="margin-top: 15px" :data-source="originList">
-                    <div slot="action" href="javascript:" slot-scope="record">
-                        <a-button type="primary" @click="deleteOrigin(record)">删除</a-button>
-                    </div>
-                </a-table>
+                <a-spin :spinning="table_spinning">
+                    <a-table :columns="originColumn" rowKey="id" style="margin-top: 15px" :data-source="originList">
+                        <div slot="action" href="javascript:" slot-scope="record">
+                            <a-button type="primary" @click="deleteOrigin(record)">删除</a-button>
+                        </div>
+                    </a-table>
+                </a-spin>
             </a-descriptions-item>
             <a-descriptions-item>
                 <a-carousel arrows dots-class="slick-dots slick-thumb">
@@ -37,11 +39,13 @@
                 </a-carousel>
             </a-descriptions-item>
             <a-descriptions-item label="计算力列表">
-                <a-table :columns="powerColumn" rowKey="id" style="margin-top: 15px" :data-source="powerList">
-                    <div slot="action" href="javascript:" slot-scope="record">
-                        <a-button type="primary" @click="deletePower(record)">删除</a-button>
-                    </div>
-                </a-table>
+                <a-spin :spinning="table_spinning">
+                    <a-table :columns="powerColumn" rowKey="id" style="margin-top: 15px" :data-source="powerList">
+                        <div slot="action" href="javascript:" slot-scope="record">
+                            <a-button type="primary" @click="deletePower(record)">删除</a-button>
+                        </div>
+                    </a-table>
+                </a-spin>
             </a-descriptions-item>
         </a-descriptions>
         <a-button type="primary" style="float:right" @click="finishLaunchTask"
@@ -111,22 +115,23 @@
                 uploadFiles: [],
                 monitor_button: true,
                 launch_button: false,
+                table_spinning: true,
             };
         },
         mounted() {
             this.task = this.$store.getters.getTask;
             this.originList = this.$store.getters.getOriginList;
             this.powerList = this.$store.getters.getPowerList;
-
             let $this = this;
             let param = new URLSearchParams();
             param.append('id', $this.task.task_id);
-            this.$api.TaskList.getTaskSelected(param).then(function (response) {
+            $this.$api.TaskList.getTaskSelected(param).then(function (response) {
                 let data = response.data;
-                if($this.originList === [])
-                    $this.originList =  data.data_providers;
-                if($this.powerList === [])
-                    $this.powerList =  data.computation_providers;
+                if ($this.originList.length === 0)
+                    $this.originList = data.data_providers;
+                if ($this.powerList.length === 0)
+                    $this.powerList = data.computation_providers;
+                $this.table_spinning = false;
             });
         },
         methods: {
