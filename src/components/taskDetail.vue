@@ -161,20 +161,24 @@
                     $this.$message.warning("请先上传训练脚本文件");
                     return;
                 }
-                param.append('id', this.task.id);
+                param.append('id', $this.task.task_id);
                 let powerList = [];
                 let originList = [];
-                for (let power in this.powerList) {
-                    powerList.push(power.id);
+                for (let index in $this.powerList) {
+                    powerList.push($this.powerList[index].id);
                 }
-                for (let origin in this.originList) {
-                    originList.push(origin.id);
+                for (let index in $this.originList) {
+                    originList.push($this.originList[index].id);
                 }
-                param.append('computation_providers', powerList);
-                param.append('data_sources', originList);
-                param.append('file', $this.uploadFiles[0].uid);
+                console.log(originList);
+                console.log(powerList);
+                console.log($this.task.task_id);
+                param.append('computation_providers', powerList.toString());
+                param.append('data_sources', originList.toString());
+                param.append('file_id', $this.uploadFiles[0].uid.toString());
                 $this.$api.TaskDetail.launchNewTask(param).then(function (response) {
                     let data = response.data;
+                    console.log(data);
                     let state = data.state;
                     if (state === true) {
                         $this.$message.info("启动任务成功");
@@ -204,26 +208,6 @@
             fileFormatter(data) {
                 let file = {uid: data.uuid, name: data.name, status: 'done', response: '{"status": "success"}',};
                 return file;
-            },
-            tabChange(key) {
-                let $this = this;
-                console.log(key);
-                if (key === 1) {
-                    $this.$router.push({
-                        path: `/taskDetail/ + ${$this.task.task_id}`,
-                        query: {data: $this.task,}
-                    });
-                } else if (key === 3) {
-                    $this.$router.replace({
-                        path: `/taskMonitor/ + ${$this.task.task_id}`,
-                        query: {data: $this.task,}
-                    });
-                } else {
-                    $this.$router.replace({
-                        path: `/taskEditor/ + ${$this.task.task_id}`,
-                        query: {data: $this.task,}
-                    });
-                }
             },
         },
     };
