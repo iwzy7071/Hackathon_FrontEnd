@@ -25,10 +25,11 @@
             </a-tabs>
             <div ref="container" style="height: 500px;"></div>
             <div v-infinite-scroll="handleConsoleOnLoad" :infinite-scroll-distance="1"
-                 style="overflow: auto;padding: 8px 24px;height: 100px;}">
+                 style="overflow: auto;padding: 8px 24px;height: 200px;}">
+                <label>控制台输出：</label>
                 <a-list size="small" :data-source="consoleInfo">
                     <a-list-item slot="renderItem" slot-scope="item">
-                        {{item.time}} {{item.message}}
+                        {{item}}
                     </a-list-item>
                     <div v-if="consoleLoading" style="text-align: center">
                         <a-spin/>
@@ -133,9 +134,9 @@
             getConsole() {
                 let param = new URLSearchParams();
                 let $this = this;
-                param.append('task_id', this.task.task_id);
+                param.append('id', $this.task.task_id);
                 $this.$api.taskEditor.getConsole(param).then(function (response) {
-                    $this.consoleInfo = $this.consoleInfo.concat(response.data);
+                    $this.consoleInfo = response.data;
                     $this.consoleLoading = false;
                 });
             },
@@ -149,8 +150,9 @@
                 this.filePanes.push({'name': event.node.title, 'key': keys[0]})
             },
             getTemplate() {
-                let param = new URLSearchParams();
                 let $this = this;
+                let param = new URLSearchParams();
+                param.append('id', $this.task.task_id);
                 this.$api.taskEditor.getTemplate(param).then(function (response) {
                     let data = response.data;
                     for (let index in data) {

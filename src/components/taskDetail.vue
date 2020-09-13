@@ -170,15 +170,11 @@
                 for (let index in $this.originList) {
                     originList.push($this.originList[index].id);
                 }
-                console.log(originList);
-                console.log(powerList);
-                console.log($this.task.task_id);
                 param.append('computation_providers', powerList.toString());
                 param.append('data_sources', originList.toString());
                 param.append('file_id', $this.uploadFiles[0].uid.toString());
                 $this.$api.TaskDetail.launchNewTask(param).then(function (response) {
                     let data = response.data;
-                    console.log(data);
                     let state = data.state;
                     if (state === true) {
                         $this.$message.info("启动任务成功");

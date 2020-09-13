@@ -1,11 +1,11 @@
 <template>
     <a-card style="border-color: #e7f6ff">
-        <a-skeleton active v-if="isCreated"/>
-        <a-descriptions id="info" v-show="!isCreated">
-            <a-descriptions-item label="训练轮数"></a-descriptions-item>
-            <a-descriptions-item label="训练用时"></a-descriptions-item>
+        <a-skeleton active v-if="!isCreated"/>
+        <a-descriptions id="info" v-show="isCreated">
+            <a-descriptions-item label="训练轮数">{{train.currentRound}}/{{train.totalRounds}}</a-descriptions-item>
+            <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
         </a-descriptions>
-        <a-descriptions v-show="!isCreated">
+        <a-descriptions v-show="isCreated">
             <a-descriptions-item label="损失函数图" style="height: fit-content;width: fit-content">
             </a-descriptions-item>
         </a-descriptions>
@@ -31,57 +31,63 @@
                 metricGraphs: [],
                 lossGraph: '',
                 timer: '',
-                isCreated: true
+                isCreated: false,
+                isGraphCreate: false
             };
         },
         beforeMount() {
             this.task = this.$store.getters.getTask;
-            this.getTaskDetail(this.task.task_id);
+            this.getTaskDetail();
             this.timer = setInterval(this.updateTaskDetail, 5000);
         },
         updated() {
-            this.showMetricGraph();
+            if (!this.isGraphCreated) {
+                this.showMetricGraph();
+                this.isGraphCreated = true;
+            }
         },
         beforeDestroy() {
             clearInterval(this.timer);
         },
         methods: {
-            // 更新任务状态
             updateTaskDetail() {
                 let $this = this;
+                if(!$this.isCreated){
+                    this.getTaskDetail();
+                    return;
+                }
                 let param = new URLSearchParams();
                 param.append('id', this.task.task_id);
                 $this.$api.TaskDetail.getMonitor(param).then(function (response) {
                     let data = response.data;
+                    $this.train = data;
                     $this.lossGraph.changeData(data.loss);
                     for (let index in data.metrics) {
                         let value = data.metrics[index].values;
                         $this.metricGraphs[index].changeData(value);
                     }
-                    $this.rectifyInfo(data.currentRound, data.totalRounds, data.time);
                 });
             },
-            //获得任务初始数据并绘图
-            getTaskDetail(id) {
+            getTaskDetail() {
                 let $this = this;
                 let param = new URLSearchParams();
-                param.append('id', id);
+                param.append('id', $this.task.task_id);
                 $this.$api.TaskDetail.getMonitor(param).then(function (response) {
-                    $this.isCreated = false;
                     let data = response.data;
-                    $this.train = data;
-                    $this.showLossGraph();
-                    $this.rectifyInfo(data.currentRound, data.totalRounds, data.time);
+                    if (data.totalRounds !== undefined) {
+                        $this.train = data;
+                        $this.isCreated = true;
+                        $this.showLossGraph();
+                    }
                 });
             },
-            //更新当前轮数和用时
-            rectifyInfo(currentRound, totalRounds, time) {
-                let element = document.getElementById('info').getElementsByClassName('ant-descriptions-item-content');
-                let element1 = element.item(0);
-                let element2 = element.item(1);
-                element1.innerHTML = currentRound + "/" + totalRounds;
-                element2.innerHTML = time;
-            },
+            // rectifyInfo(currentRound, totalRounds, time) {
+            //     let element = document.getElementById('info').getElementsByClassName('ant-descriptions-item-content');
+            //     let element1 = element.item(0);
+            //     let element2 = element.item(1);
+            //     element1.innerHTML = currentRound + "/" + totalRounds;
+            //     element2.innerHTML = time;
+            // },
             showLossGraph() {
                 const data = this.train.loss;
                 const chart = new Chart({
