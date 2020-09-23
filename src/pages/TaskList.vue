@@ -22,6 +22,12 @@
                              rowKey="task_id"
                              style="margin-top: 15px"
                              :data-source="taskList">
+                        <div slot="status" href="javascript:" slot-scope="text">
+                            <span v-if="text === 0">未开始</span>
+                            <a v-else-if="text === 1">进行中</a>
+                            <span v-else-if="text === 2">已完成</span>
+                            <span v-else-if="text === 3">已终止</span>
+                        </div>
                         <div slot="action" href="javascript:" slot-scope="record">
                             <a-button type="primary" @click="taskDetail(record)">详情</a-button>
                         </div>
@@ -47,39 +53,35 @@
                 powerList: [],
                 TaskColumn: [
                     {
-                        title: '任务ID',
+                        title: 'ID',
                         dataIndex: 'task_id',
                         key: 'task_id',
                     },
                     {
-                        title: '任务名称',
+                        title: '名称',
                         dataIndex: 'name',
                         key: 'name',
-                        ellipsis: true,
                     },
                     {
-                        title: '任务描述',
+                        title: '描述',
                         dataIndex: 'desc',
                         key: 'desc',
-                        ellipsis: true,
                     },
                     {
-                        title: '任务发布时间',
+                        title: '发布时间',
                         dataIndex: 'start_time',
                         key: 'start_time',
-                        ellipsis: true,
                     },
                     {
-                        title: '任务完成时间',
+                        title: '完成时间',
                         dataIndex: 'finish_time',
                         key: 'finish_time',
-                        ellipsis: true,
                     },
                     {
-                        title: '任务状态',
+                        title: '状态',
                         dataIndex: 'status',
                         key: 'status',
-                        ellipsis: true,
+                        scopedSlots: {customRender: 'status'},
                     },
                     {
                         title: '操作',
@@ -118,8 +120,9 @@
                 param.append('id', id);
                 this.$api.TaskList.getTaskSelected(param).then(function (response) {
                     let data = response.data;
-                    $this.$store.commit('setOriginList', data.data_providers);
-                    $this.$store.commit('setPowerList', data.computation_providers);
+                    $this.$store.state.originList = data.data_providers;
+                    $this.$store.state.powerList = data.computation_providers;
+                    $this.$message.info("已获取任务" + id + "所选数据源和计算力列表");
                 });
             },
             onSelectChange(selectedRowKeys) {
@@ -137,7 +140,7 @@
                 this.getTaskSelected(this.selectedTask);
             },
             taskDetail(record) {
-                this.$store.commit('setTask', record);
+                this.$store.state.task = record;
                 this.$router.push({path: `/taskDetail`});
             },
             finishAddTask() {

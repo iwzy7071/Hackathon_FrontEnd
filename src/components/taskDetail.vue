@@ -1,60 +1,46 @@
 <template>
     <a-card style="border-color: #e7f6ff;">
-        <a-descriptions>
-            <a-descriptions-item label="任务ID">{{task.task_id}}</a-descriptions-item>
-            <a-descriptions-item label="任务名称">{{task.name}}</a-descriptions-item>
-            <a-descriptions-item label="任务描述">{{task.desc}}</a-descriptions-item>
+        <a-skeleton active v-if="spinning"/>
+        <a-descriptions title="任务概述" v-if="!spinning">
+            <a-descriptions-item label="任务ID">{{this.$store.state.task.task_id}}</a-descriptions-item>
+            <a-descriptions-item v-if="this.$store.state.task.status === 0" label="状态">未开始</a-descriptions-item>
+            <a-descriptions-item v-if="this.$store.state.task.status === 1" label="状态">进行中</a-descriptions-item>
+            <a-descriptions-item v-if="this.$store.state.task.status === 2" label="状态">已完成</a-descriptions-item>
+            <a-descriptions-item v-if="this.$store.state.task.status === 3" label="状态">已终止</a-descriptions-item>
+            <a-descriptions-item label="创建时间">{{this.$store.state.task.start_time}}</a-descriptions-item>
+            <a-descriptions-item label="任务名称">{{this.$store.state.task.name}}</a-descriptions-item>
+            <a-descriptions-item label="数据源数量">{{this.$store.state.originList.length}}</a-descriptions-item>
+            <a-descriptions-item label="完成时间">{{this.$store.state.task.finish_time}}</a-descriptions-item>
+            <a-descriptions-item label="任务描述">{{this.$store.state.task.desc}}</a-descriptions-item>
+            <a-descriptions-item label="计算力数量">{{this.$store.state.powerList.length}}</a-descriptions-item>
+            <a-descriptions-item label="总时长">{{this.$store.state.task.total_time}}</a-descriptions-item>
         </a-descriptions>
-        <a-form>
-            <a-form-item label="上传训练脚本文件">
-                <div style="width: 50%;height: auto">
-                    <a-upload-dragger name="file" :multiple="false" :fileList="uploadFiles"
-                                      :customRequest="UploadTrainFileRequest">
-                        <p class="ant-upload-drag-icon">
-                            <a-icon type="inbox"/>
-                        </p>
-                        <p style="font-size: small">
-                            点击或拖拽文件上传
-                        </p>
-                    </a-upload-dragger>
-                </div>
-            </a-form-item>
-            <a-form-item>
-                <img src="../../static/1.jpeg" style="width: 100%;height: auto"/>
-            </a-form-item>
-        </a-form>
-        <a-descriptions>
-            <a-descriptions-item label="数据源列表">
-                <a-spin :spinning="table_spinning">
-                    <a-table :columns="originColumn" rowKey="id" style="margin-top: 15px" :data-source="originList">
-                        <div slot="action" href="javascript:" slot-scope="record">
-                            <a-button type="primary" @click="deleteOrigin(record)">删除</a-button>
-                        </div>
-                    </a-table>
-                </a-spin>
-            </a-descriptions-item>
-            <a-descriptions-item>
-                <a-carousel arrows dots-class="slick-dots slick-thumb">
-                    <img src="/static/1.png"/>
-                </a-carousel>
-            </a-descriptions-item>
-            <a-descriptions-item label="计算力列表">
-                <a-spin :spinning="table_spinning">
-                    <a-table :columns="powerColumn" rowKey="id" style="margin-top: 15px" :data-source="powerList">
-                        <div slot="action" href="javascript:" slot-scope="record">
-                            <a-button type="primary" @click="deletePower(record)">删除</a-button>
-                        </div>
-                    </a-table>
-                </a-spin>
-            </a-descriptions-item>
-        </a-descriptions>
-        <a-button type="primary" style="float:right" @click="finishLaunchTask"
-                  :disabled="launch_button">开始任务
-        </a-button>
     </a-card>
+    <!--    <task-selected/>-->
+    <!--    <task-selected-button/>-->
+    <!--        <a-form>-->
+    <!--            <a-form-item label="上传训练脚本文件">-->
+    <!--                <div style="width: 50%;height: auto">-->
+    <!--                    <a-upload-dragger name="file" :multiple="false" :fileList="uploadFiles"-->
+    <!--                                      :customRequest="UploadTrainFileRequest">-->
+    <!--                        <p class="ant-upload-drag-icon">-->
+    <!--                            <a-icon type="inbox"/>-->
+    <!--                        </p>-->
+    <!--                        <p style="font-size: small">-->
+    <!--                            点击或拖拽文件上传-->
+    <!--                        </p>-->
+    <!--                    </a-upload-dragger>-->
+    <!--                </div>-->
+    <!--            </a-form-item>-->
+    <!--            <a-form-item>-->
+    <!--                <img src="../../static/1.jpeg" style="width: 100%;height: auto"/>-->
+    <!--            </a-form-item>-->
+    <!--        </a-form>-->
+    <!--        <a-button type="primary" style="float:right" @click="finishLaunchTask"-->
+    <!--                  :disabled="launch_button">开始任务-->
+    <!--        </a-button>-->
 </template>
 <script>
-
     export default {
         data() {
             return {
@@ -115,24 +101,23 @@
                 uploadFiles: [],
                 monitor_button: true,
                 launch_button: false,
-                table_spinning: true,
+                spinning: true,
             };
         },
         mounted() {
-            this.task = this.$store.getters.getTask;
-            this.originList = this.$store.getters.getOriginList;
-            this.powerList = this.$store.getters.getPowerList;
             let $this = this;
-            let param = new URLSearchParams();
-            param.append('id', $this.task.task_id);
-            $this.$api.TaskList.getTaskSelected(param).then(function (response) {
-                let data = response.data;
-                if ($this.originList.length === 0)
-                    $this.originList = data.data_providers;
-                if ($this.powerList.length === 0)
-                    $this.powerList = data.computation_providers;
-                $this.table_spinning = false;
-            });
+            if ($this.$store.state.originList.length === 0 && $this.$store.state.powerList.length === 0) {
+                let param = new URLSearchParams();
+                param.append('id', $this.$store.state.task.task_id);
+                $this.$api.TaskList.getTaskSelected(param).then(function (response) {
+                    let data = response.data;
+                    $this.$store.state.originList = data.data_providers;
+                    $this.$store.state.powerList = data.computation_providers;
+                    $this.spinning = false;
+                });
+            }else{
+                $this.spinning = false;
+            }
         },
         methods: {
             deletePower(record) {
@@ -187,7 +172,12 @@
             UploadTrainFileRequest(data) {
                 let $this = this;
                 $this.$message.info("上传文件成功");
-                $this.uploadFiles = [{'uid':'SHA131236841232','name':'SHA131236841232',status: 'done', response: '{"status": "success"}'}];
+                $this.uploadFiles = [{
+                    'uid': 'SHA131236841232',
+                    'name': 'SHA131236841232',
+                    status: 'done',
+                    response: '{"status": "success"}'
+                }];
                 console.log(data);
                 // let formData = new FormData();
                 // formData.append('file', data.file);

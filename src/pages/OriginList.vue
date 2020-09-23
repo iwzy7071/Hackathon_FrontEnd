@@ -34,27 +34,27 @@
                 originList: [],
                 originColumn: [
                     {
-                        title: '源ID',
+                        title: 'ID',
                         dataIndex: 'id',
                         key: 'id',
                     },
                     {
-                        title: '源名称',
+                        title: '名称',
                         dataIndex: 'name',
                         key: 'name',
                     },
                     {
-                        title: '源描述',
+                        title: '描述',
                         dataIndex: 'desc',
                         key: 'desc',
                     },
                     {
-                        title: '源提供者',
+                        title: '提供者',
                         dataIndex: 'provider',
                         key: 'provider',
                     },
                     {
-                        title: '源地址',
+                        title: '地址',
                         dataIndex: 'addr',
                         key: 'addr',
                     },

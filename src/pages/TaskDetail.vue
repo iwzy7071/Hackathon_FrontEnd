@@ -11,18 +11,21 @@
                 <taskMonitor/>
             </a-tab-pane>
         </a-tabs>
+        <task-selected/>
+        <task-selected-button/>
     </a-layout>
 </template>
 <script>
     import taskDetail from "../components/taskDetail";
     import taskEditor from "../components/taskEditor";
     import taskMonitor from "../components/taskMonitor";
+    import taskSelected from "../components/taskSelected";
+    import taskSelectedButton from "../components/taskSelectedButton";
 
     export default {
-        components: {taskDetail, taskEditor, taskMonitor},
+        components: {taskDetail, taskEditor, taskMonitor, taskSelected, taskSelectedButton},
         data() {
-            return {
-            };
+            return {};
         },
     };
 </script>
