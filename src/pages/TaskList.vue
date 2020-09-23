@@ -29,10 +29,16 @@
                 </a-spin>
             </a-layout-content>
         </a-card>
+        <task-selected/>
+        <task-selected-button/>
     </a-layout>
 </template>
 <script>
+    import taskSelected from "../components/taskSelected";
+    import taskSelectedButton from "../components/taskSelectedButton";
+
     export default {
+        components: {taskSelected, taskSelectedButton},
         inject: ['reload'],
         data() {
             return {
@@ -52,33 +58,27 @@
                         ellipsis: true,
                     },
                     {
-                        title: '创建方',
-                        dataIndex: 'creator',
-                        key: 'creator',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '任务类型',
-                        dataIndex: 'type',
-                        key: 'type',
-                        ellipsis: true,
-                    },
-                    {
                         title: '任务描述',
                         dataIndex: 'desc',
                         key: 'desc',
                         ellipsis: true,
                     },
                     {
-                        title: '创建时间',
+                        title: '任务发布时间',
                         dataIndex: 'start_time',
                         key: 'start_time',
                         ellipsis: true,
                     },
                     {
-                        title: '完成时间',
+                        title: '任务完成时间',
                         dataIndex: 'finish_time',
                         key: 'finish_time',
+                        ellipsis: true,
+                    },
+                    {
+                        title: '任务状态',
+                        dataIndex: 'status',
+                        key: 'status',
                         ellipsis: true,
                     },
                     {
@@ -92,6 +92,7 @@
                 add_task_visible: false,
                 launchTaskForm: this.$form.createForm(this, {name: 'launchTaskForm'}),
                 headers: {authorization: 'authorization-text',},
+                task_visible: false,
                 task_spinning: true,
             };
         },
@@ -163,6 +164,7 @@
             },
             showAddTask() {
                 this.add_task_visible = true;
+
             }
         }
     };

@@ -8,11 +8,12 @@ export default new Vuex.Store({
         originList: [],
         powerList: [],
         taskList: [],
+        task_selected_visible: false,
         task: {},
     },
     mutations: {
-        setOriginList(state, originList) {
-            state.originList = originList;
+        deletePower(state, index) {
+            state.powerList.slice(index, 1);
         },
         setPowerList(state, powerList) {
             state.powerList = powerList;
