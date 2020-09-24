@@ -167,7 +167,6 @@
             },
             showAddTask() {
                 this.add_task_visible = true;
-
             }
         }
     };
