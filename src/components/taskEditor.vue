@@ -84,10 +84,10 @@
         },
         methods: {
             submitConsoleScript() {
-                let param = new URLSearchParams();
+                let param = new FormData();
                 let $this = this;
-                param.append('id', $this.task.task_id);
-                param.append('script', $this.code);
+                param.append("id", $this.$store.state.task.task_id);
+                param.append('file', $this.code);
                 $this.$api.TaskDetail.uploadFile(param).then(function (response) {
                     let data = response.data;
                     if (data.state === false)

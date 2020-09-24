@@ -7,8 +7,11 @@
             <a-tab-pane key="2" tab="IDE">
                 <taskEditor/>
             </a-tab-pane>
-            <a-tab-pane key="3" tab="训练监测">
+            <a-tab-pane key="3" tab="可视化">
                 <taskMonitor/>
+            </a-tab-pane>
+            <a-tab-pane key="4" tab="日志">
+                <task-log/>
             </a-tab-pane>
         </a-tabs>
         <task-selected/>
@@ -21,9 +24,10 @@
     import taskMonitor from "../components/taskMonitor";
     import taskSelected from "../components/taskSelected";
     import taskSelectedButton from "../components/taskSelectedButton";
+    import taskLog from "../components/taskLog";
 
     export default {
-        components: {taskDetail, taskEditor, taskMonitor, taskSelected, taskSelectedButton},
+        components: {taskDetail, taskEditor, taskMonitor, taskSelected, taskSelectedButton, taskLog},
         data() {
             return {};
         },
