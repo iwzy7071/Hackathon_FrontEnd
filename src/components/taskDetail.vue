@@ -59,54 +59,6 @@
     export default {
         data() {
             return {
-                originColumn: [
-                    {
-                        title: '源ID',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    {
-                        title: '名称',
-                        dataIndex: 'name',
-                        key: 'name',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '源地址',
-                        dataIndex: 'addr',
-                        key: 'addr',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        scopedSlots: {customRender: 'action'},
-                    },
-                ],
-                powerColumn: [
-                    {
-                        title: 'ID',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    {
-                        title: '提供方',
-                        dataIndex: 'provider',
-                        key: 'provider',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '地址',
-                        dataIndex: 'addr',
-                        key: 'addr',
-                        ellipsis: true,
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        scopedSlots: {customRender: 'action'},
-                    },
-                ],
                 spinning: true,
                 progressList: [{"index": -1, "status": "wait", "title": "获取授权"}],
                 uid: ""
@@ -155,26 +107,31 @@
             },
             uploadFile(info) {
                 let $this = this;
-                const param = new FormData();
-                param.append("file", info.file);
-                param.append("id", $this.$store.state.task.task_id);
-                $this.$api.TaskDetail.uploadFile(param).then(function (response) {
-                    let data = response.data;
-                    let uid = data.uid;
-                    $this.uid = uid;
-                    let state = data.state;
-                    if (state === true) {
-                        $this.$message.info("成功上传文件" + info.file.name);
-                        var index = 0;
-                        for (index in $this.progressList) {
-                            if ($this.progressList[index].title === "上传模型训练脚本")
-                                break;
+                const reader = new FileReader();
+                reader.readAsText(info.file);
+                reader.onload = function () {
+                    let result = this.result;
+                    const param = new FormData();
+                    param.append("file", result);
+                    param.append("id", $this.$store.state.task.task_id);
+                    $this.$api.TaskDetail.uploadFile(param).then(function (response) {
+                        let data = response.data;
+                        let uid = data.uid;
+                        $this.$store.state.uploadFileId = uid;
+                        let state = data.state;
+                        if (state === true) {
+                            $this.$message.info("上传脚本文件" + info.file.name + "成功");
+                            var index = 0;
+                            for (index in $this.progressList) {
+                                if ($this.progressList[index].title === "上传模型训练脚本")
+                                    break;
+                            }
+                            $this.progressList[index].title = "开始模型训练";
+                        } else {
+                            $this.$message.warn("上传脚本文件" + info.file.name + "失败");
                         }
-                        $this.progressList[index].title = "开始模型训练";
-                    } else {
-                        $this.$message.warn("上传文件" + info.file.name + "失败");
-                    }
-                });
+                    });
+                }
             }
         },
     };

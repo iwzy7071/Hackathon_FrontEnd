@@ -10,6 +10,7 @@ export default new Vuex.Store({
         taskList: [],
         task_selected_visible: false,
         task: {},
+        uploadFileId: "",
     },
     mutations: {
         deletePower(state, index) {

@@ -26,7 +26,6 @@
         data() {
             return {
                 collapsed: false,
-                task: {},
                 train: {},
                 metricGraphs: [],
                 lossGraph: '',
@@ -36,7 +35,6 @@
             };
         },
         beforeMount() {
-            this.task = this.$store.getters.getTask;
             this.getTaskDetail();
             this.timer = setInterval(this.updateTaskDetail, 5000);
         },
@@ -57,7 +55,7 @@
                     return;
                 }
                 let param = new URLSearchParams();
-                param.append('id', this.task.task_id);
+                param.append('id', $this.$store.state.task.task_id);
                 $this.$api.TaskDetail.getMonitor(param).then(function (response) {
                     let data = response.data;
                     $this.train = data;
@@ -71,7 +69,7 @@
             getTaskDetail() {
                 let $this = this;
                 let param = new URLSearchParams();
-                param.append('id', $this.task.task_id);
+                param.append('id', $this.$store.state.task.task_id);
                 $this.$api.TaskDetail.getMonitor(param).then(function (response) {
                     let data = response.data;
                     if (data.totalRounds !== undefined) {
@@ -81,13 +79,6 @@
                     }
                 });
             },
-            // rectifyInfo(currentRound, totalRounds, time) {
-            //     let element = document.getElementById('info').getElementsByClassName('ant-descriptions-item-content');
-            //     let element1 = element.item(0);
-            //     let element2 = element.item(1);
-            //     element1.innerHTML = currentRound + "/" + totalRounds;
-            //     element2.innerHTML = time;
-            // },
             showLossGraph() {
                 const data = this.train.loss;
                 const chart = new Chart({

@@ -9,7 +9,7 @@ const TaskDetail = {
         return axios.get(`${base.product}/getTemplates`, params)
     },
     submitConsoleScript(params) {
-        return axios.post(`${base.develop}/uploadScript`, params)
+        return axios.post(`${base.develop}/submitTaskFile`, params)
     }
 };
 

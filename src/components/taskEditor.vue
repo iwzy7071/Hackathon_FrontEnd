@@ -24,11 +24,11 @@
                 </a-tab-pane>
             </a-tabs>
             <div ref="container" style="height: 500px;"></div>
+            <div style="margin-top: 2%">控制台输出：</div>
             <div v-infinite-scroll="handleConsoleOnLoad" :infinite-scroll-distance="1"
-                 style="overflow: auto;padding: 8px 24px;height: 200px;}">
-                <label>控制台输出：</label>
-                <a-list size="small" :data-source="consoleInfo">
-                    <a-list-item slot="renderItem" slot-scope="item">
+                 style="overflow: auto;height: 200px;background-color: #eeeeee}">
+                <a-list size="small" :data-source="consoleInfo" style="background-color: #f0f2f5;font-size: xx-small;">
+                    <a-list-item slot="renderItem" slot-scope="item" style="padding: 3px">
                         {{item}}
                     </a-list-item>
                     <div v-if="consoleLoading" style="text-align: center">
@@ -63,7 +63,6 @@
         },
         mounted() {
             let $this = this;
-            this.task = this.$store.getters.getTask;
             $this.getConsole();
             let container = $this.$refs.container;
             $this.monacoEditor = monaco.editor.create(container, {
@@ -88,13 +87,15 @@
                 let param = new URLSearchParams();
                 let $this = this;
                 param.append('id', $this.task.task_id);
-                param.append('script',$this.code);
-                $this.$api.taskEditor.submitConsoleScript(param).then(function (response) {
-                    let state = response.state;
-                    if(state === false)
-                        $this.$message.warn("运行脚本失败");
-                    else
-                        $this.$message.info("运行脚本成功");
+                param.append('script', $this.code);
+                $this.$api.TaskDetail.uploadFile(param).then(function (response) {
+                    let data = response.data;
+                    if (data.state === false)
+                        $this.$message.warn("上传脚本文件" + $this.filePanes[$this.activeKey].name + "失败");
+                    else {
+                        $this.$store.state.uploadFileId = data.uid;
+                        $this.$message.info("上传脚本文件" + $this.filePanes[$this.activeKey].name + "成功");
+                    }
                 });
             },
             handleConsoleOnLoad() {
@@ -134,7 +135,7 @@
             getConsole() {
                 let param = new URLSearchParams();
                 let $this = this;
-                param.append('id', $this.task.task_id);
+                param.append('id', $this.$store.state.task.task_id);
                 $this.$api.taskEditor.getConsole(param).then(function (response) {
                     $this.consoleInfo = response.data;
                     $this.consoleLoading = false;
