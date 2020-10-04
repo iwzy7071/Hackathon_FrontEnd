@@ -33,6 +33,8 @@
                               :style="{width:'300px',backgroundColor:step.status==='wait' ?'lightgray':'lightgreen'}">
                         {{step.title}}
                     </a-button>
+                    <a-progress slot="subTitle" :stroke-color="{from: '#108ee9',to: '#87d068',}" :percent="50"
+                                status="active" v-if="step.title === '模型训练中'"/>
                     <a-upload slot="title" v-if="step.title === '上传模型训练脚本'" :customRequest="uploadFile"
                               :show-upload-list="false">
                         <a-button

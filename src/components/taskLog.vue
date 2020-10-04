@@ -2,7 +2,7 @@
     <a-layout style="border-color: #e7f6ff;">
         <a-card style="border-color: #e7f6ff;margin-top: 1%">
             <h4>LOG</h4>
-            <div ref="container" style="height: 200px;"></div>
+            <div ref="container" style="height: 275px;"></div>
         </a-card>
     </a-layout>
 </template>

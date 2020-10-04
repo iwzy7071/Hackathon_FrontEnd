@@ -9,7 +9,7 @@ const TaskDetail = {
         return axios.post(`${base.product}/launchTask`, params)
     },
     uploadFile(params) {
-        return axios.post(`${base.develop}/submitTaskFile`, params)
+        return axios.post(`${base.product}/submitTaskFile`, params)
     },
 };
 

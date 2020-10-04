@@ -20,31 +20,16 @@
         <a-card style="margin-left: 1%;">
             <a-tabs type="editable-card" @edit="onEdit" size="small" default-active-key="activeKey"
                     @tabClick="changePanes">
-                <a-tab-pane v-for="file in filePanes" :key="file.key" :tab="file.name">
-                </a-tab-pane>
+                <a-tab-pane v-for="file in filePanes" :key="file.key" :tab="file.name"></a-tab-pane>
             </a-tabs>
             <div ref="container" style="height: 500px;"></div>
-            <div style="margin-top: 2%">控制台输出：</div>
-            <div v-infinite-scroll="handleConsoleOnLoad" :infinite-scroll-distance="1"
-                 style="overflow: auto;height: 200px;background-color: #eeeeee}">
-                <a-list size="small" :data-source="consoleInfo" style="background-color: #f0f2f5;font-size: xx-small;">
-                    <a-list-item slot="renderItem" slot-scope="item" style="padding: 3px">
-                        {{item}}
-                    </a-list-item>
-                    <div v-if="consoleLoading" style="text-align: center">
-                        <a-spin/>
-                    </div>
-                </a-list>
-            </div>
         </a-card>
     </a-layout>
 </template>
 <script>
     import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
-    import infiniteScroll from 'vue-infinite-scroll';
 
     export default {
-        directives: {infiniteScroll},
         data() {
             return {
                 task: {},
@@ -53,9 +38,7 @@
                 codes: [],
                 code: '',
                 monacoEditor: {},
-                consoleInfo: [],
                 activeKey: 0,
-                consoleLoading: false,
             };
         },
         beforeMount() {
@@ -63,7 +46,6 @@
         },
         mounted() {
             let $this = this;
-            $this.getConsole();
             let container = $this.$refs.container;
             $this.monacoEditor = monaco.editor.create(container, {
                 value: '',
@@ -98,10 +80,6 @@
                     }
                 });
             },
-            handleConsoleOnLoad() {
-                this.consoleLoading = true;
-                this.getConsole();
-            },
             onEdit(targetKey, action) {
                 this[action](targetKey);
             },
@@ -131,15 +109,6 @@
                 }
                 this.filePanes = panes;
                 this.activeKey = activeKey;
-            },
-            getConsole() {
-                let param = new URLSearchParams();
-                let $this = this;
-                param.append('id', $this.$store.state.task.task_id);
-                $this.$api.taskEditor.getConsole(param).then(function (response) {
-                    $this.consoleInfo = response.data;
-                    $this.consoleLoading = false;
-                });
             },
             selectFile(keys, event) {
                 let key = keys[0];
