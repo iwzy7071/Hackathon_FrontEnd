@@ -1,11 +1,11 @@
 <template>
     <a-card style="border-color: #e7f6ff">
         <a-skeleton active v-if="!isCreated"/>
-        <a-descriptions id="info" v-show="isCreated">
+        <a-descriptions id="info" v-show="isCreated && !isError">
             <a-descriptions-item label="训练轮数">{{train.currentRound}}/{{train.totalRounds}}</a-descriptions-item>
             <a-descriptions-item label="训练用时">{{train.time}}</a-descriptions-item>
         </a-descriptions>
-        <a-descriptions v-show="isCreated">
+        <a-descriptions v-show="isCreated&& !isError">
             <a-descriptions-item label="损失函数图" style="height: fit-content;width: fit-content">
             </a-descriptions-item>
         </a-descriptions>
@@ -17,6 +17,7 @@
             </a-descriptions>
             <div :id="item.name"></div>
         </div>
+        <a-result status="404" title="暂无数据记录" sub-title="请刷新或稍后尝试" v-if="isCreated && isError"/>
     </a-card>
 </template>
 <script>
@@ -31,7 +32,8 @@
                 lossGraph: '',
                 timer: '',
                 isCreated: false,
-                isGraphCreate: false
+                isGraphCreate: false,
+                isError: false,
             };
         },
         beforeMount() {
@@ -50,7 +52,7 @@
         methods: {
             updateTaskDetail() {
                 let $this = this;
-                if(!$this.isCreated){
+                if (!$this.isCreated) {
                     this.getTaskDetail();
                     return;
                 }
@@ -71,6 +73,12 @@
                 let param = new URLSearchParams();
                 param.append('id', $this.$store.state.task.task_id);
                 $this.$api.TaskDetail.getMonitor(param).then(function (response) {
+                    if ($this.$store.state.axiosError === "404") {
+                        $this.isCreated = true;
+                        $this.isError = true;
+                        clearInterval($this.timer);
+                        return;
+                    }
                     let data = response.data;
                     if (data.totalRounds !== undefined) {
                         $this.train = data;

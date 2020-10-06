@@ -85,7 +85,7 @@
         },
         methods: {
             taskSelectedClose() {
-                this.$store.state.task_selected_visible = false;
+                this.$store.commit("setTaskSelectedVisible", false);
             },
             deleteOrigin(text) {
                 let index = 0;
@@ -96,7 +96,7 @@
                     }
                 }
                 if (index !== this.$store.state.originList.length) {
-                    this.$store.state.originList.splice(index, 1);
+                    this.$store.commit("sliceOriginList", index);
                     this.$message.info("已从任务中移除" + text + "计算力");
                 }
             },
@@ -109,7 +109,7 @@
                     }
                 }
                 if (index !== this.$store.state.powerList.length) {
-                    this.$store.state.powerList.splice(index, 1);
+                    this.$store.commit("slicePowerList", index);
                     this.$message.info("已从任务中移除" + text + "计算力");
                 }
             },

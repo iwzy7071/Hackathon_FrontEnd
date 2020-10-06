@@ -16,6 +16,10 @@
             };
         },
         beforeMount() {
+            this.timer = setInterval(this.getConsole, 2000);
+        },
+        beforeDestroy() {
+            clearInterval(this.timer);
         },
         mounted() {
             let $this = this;
@@ -39,6 +43,20 @@
                 });
             });
         },
-        methods: {},
+        methods: {
+            getConsole() {
+                let $this = this;
+                let param = new URLSearchParams();
+                param.append('id', $this.$store.state.task.task_id);
+                $this.$api.taskEditor.getConsole(param).then(function (response) {
+                    let consoleInfo = response.data;
+                    consoleInfo = consoleInfo.join("\n");
+                    if (consoleInfo !== $this.monacoEditor.getValue()) {
+                        $this.monacoEditor.setValue(consoleInfo);
+                        console.log("success");
+                    }
+                });
+            }
+        },
     };
 </script>

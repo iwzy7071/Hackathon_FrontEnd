@@ -2,10 +2,10 @@
     <a-layout style="padding: 0 24px 24px;border-color: #e7f6ff" theme="light">
         <a-tabs default-active-key="1">
             <a-tab-pane key="1" tab="总览">
-                <taskDetail style="height: 100%;width: 100%"/>
+                <taskDetail ref="taskDetail"/>
             </a-tab-pane>
             <a-tab-pane key="2" tab="IDE">
-                <taskEditor/>
+                <taskEditor @uploadFileSucceed="uploadFileUpdate"/>
             </a-tab-pane>
             <a-tab-pane key="3" tab="可视化">
                 <taskMonitor/>
@@ -31,5 +31,10 @@
         data() {
             return {};
         },
+        methods: {
+            uploadFileUpdate() {
+                this.$refs.taskDetail.uploadFileUpdate();
+            }
+        }
     };
 </script>

@@ -44,11 +44,6 @@
                         key: 'name',
                     },
                     {
-                        title: '描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
-                    },
-                    {
                         title: '提供者',
                         dataIndex: 'provider',
                         key: 'provider',
@@ -85,7 +80,7 @@
             addSelected(record) {
                 let index = this.$store.state.originList.indexOf(record);
                 if (index === -1) {
-                    this.$store.state.originList.push(record);
+                    this.$store.commit("pushOriginList", record);
                     this.$message.info("已添加数据源" + record.name + "至任务");
                 }
             },
@@ -93,7 +88,7 @@
             minusSelected(record) {
                 let index = this.$store.state.originList.indexOf(record);
                 if (index !== -1) {
-                    this.$store.state.originList.splice(index, 1);
+                    this.$store.commit("sliceOriginList", index);
                     this.$message.info("已从任务中移除" + record.name + "数据源");
                 }
             },

@@ -8,7 +8,7 @@
         },
         methods: {
             showTaskSelected() {
-                this.$store.state.task_selected_visible = true;
+                this.$store.commit("setTaskSelectedVisible", true);
             },
         }
     };

@@ -75,7 +75,8 @@
                     if (data.state === false)
                         $this.$message.warn("上传脚本文件" + $this.filePanes[$this.activeKey].name + "失败");
                     else {
-                        $this.$store.state.uploadFileId = data.uid;
+                        this.$store.commit("setUploadFileId", data.uid);
+                        $this.$emit("uploadFileSucceed");
                         $this.$message.info("上传脚本文件" + $this.filePanes[$this.activeKey].name + "成功");
                     }
                 });

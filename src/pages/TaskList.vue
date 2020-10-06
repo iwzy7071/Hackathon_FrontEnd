@@ -102,7 +102,7 @@
             this.getTaskList();
         },
         mounted() {
-            this.selectedRowKeys = this.$store.getters.getTaskSelected;
+            this.selectedRowKeys = this.$store.state.taskSelected;
         },
         methods: {
             getTaskList() {
@@ -120,8 +120,8 @@
                 param.append('id', id);
                 this.$api.TaskList.getTaskSelected(param).then(function (response) {
                     let data = response.data;
-                    $this.$store.state.originList = data.data_providers;
-                    $this.$store.state.powerList = data.computation_providers;
+                    $this.$store.commit("setOriginList", data.data_providers);
+                    $this.$store.commit("setPowerList", data.computation_providers);
                     $this.$message.info("已获取任务" + id + "所选数据源和计算力列表");
                 });
             },
@@ -130,17 +130,17 @@
                     this.selectedTask = selectedRowKeys[1];
                 } else if (selectedRowKeys.length === 0) {
                     this.selectedTask = undefined;
-                    this.$store.commit('setOriginList', []);
-                    this.$store.commit('setPowerList', []);
+                    this.$store.commit("setOriginList", []);
+                    this.$store.commit("setPowerList", []);
                 } else {
                     this.selectedTask = selectedRowKeys[0];
                 }
                 this.selectedRowKeys = [this.selectedTask];
-                this.$store.commit('setTaskSelected', this.selectedRowKeys);
+                this.$store.commit("setTaskSelected", this.selectedRowKeys);
                 this.getTaskSelected(this.selectedTask);
             },
             taskDetail(record) {
-                this.$store.state.task = record;
+                this.$store.commit("setTask", record);
                 this.$router.push({path: `/taskDetail`});
             },
             finishAddTask() {

@@ -49,11 +49,6 @@
                         key: 'provider',
                     },
                     {
-                        title: '描述',
-                        dataIndex: 'desc',
-                        key: 'desc',
-                    },
-                    {
                         title: '地址',
                         dataIndex: 'addr',
                         key: 'addr',
@@ -85,7 +80,7 @@
             addSelected(record) {
                 let index = this.$store.state.powerList.indexOf(record);
                 if (index === -1) {
-                    this.$store.state.powerList.push(record);
+                    this.$store.commit("pushPowerList", record);
                     this.$message.info("已添加计算力" + record.device + "至任务");
                 }
             },
@@ -93,7 +88,7 @@
             minusSelected(record) {
                 let index = this.$store.state.powerList.indexOf(record);
                 if (index !== -1) {
-                    this.$store.state.powerList.splice(index, 1);
+                    this.$store.commit("slicePowerList", index);
                     this.$message.info("已从任务中移除" + record.device + "计算力");
                 }
             },

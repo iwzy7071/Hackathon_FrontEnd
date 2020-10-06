@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex);
 
@@ -11,33 +12,49 @@ export default new Vuex.Store({
         task_selected_visible: false,
         task: {},
         uploadFileId: "",
+        axiosError: "",
+        taskSelected: []
     },
     mutations: {
-        deletePower(state, index) {
-            state.powerList.slice(index, 1);
+        setOriginList(state, originList) {
+            state.originList = originList;
         },
         setPowerList(state, powerList) {
             state.powerList = powerList;
         },
-        setTaskSelected(state, taskList) {
+        setTaskList(state, taskList) {
             state.taskList = taskList;
         },
+        setTaskSelectedVisible(state, task_selected_visible) {
+            state.task_selected_visible = task_selected_visible;
+        },
         setTask(state, task) {
-            let s = JSON.stringify(task);
-            sessionStorage.setItem("task", s);
             state.task = task;
+        },
+        setAxiosError(state, axiosError) {
+            state.axiosError = axiosError;
+        },
+        setTaskSelected(state, taskSelected) {
+            state.taskSelected = taskSelected;
+        },
+        setUploadFileId(state, uploadFileId) {
+            state.uploadFileId = uploadFileId;
+        },
+        slicePowerList(state, index) {
+            state.powerList.splice(index, 1);
+        },
+        pushPowerList(state, record) {
+            state.powerList.push(record);
+        },
+        sliceOriginList(state, index) {
+            state.originList.splice(index, 1);
+        },
+        pushOriginList(state, record) {
+            state.originList.push(record);
         },
     },
     actions: {},
-    modules: {},
-    getters: {
-        getOriginList: state => state.originList,
-        getPowerList: state => state.powerList,
-        getTaskSelected: state => state.taskList,
-        getTask(state) {
-            let task = sessionStorage.getItem("task");
-            state.task = JSON.parse(task);
-            return state.task;
-        }
-    }
+    plugins: [createPersistedState({
+        storage: window.sessionStorage
+    })]
 })
