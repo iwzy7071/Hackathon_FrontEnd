@@ -76,14 +76,14 @@
                 param.append('id', $this.$store.state.task.task_id);
                 $this.$api.TaskList.getTaskSelected(param).then(function (response) {
                     let data = response.data;
-                    this.$store.commit("setOriginList", data.data_providers);
-                    this.$store.commit("setPowerList", data.computation_providers);
+                    $this.$store.commit("setOriginList", data.data_providers);
+                    $this.$store.commit("setPowerList", data.computation_providers);
                     $this.spinning = false;
                 });
             } else {
                 $this.spinning = false;
             }
-            this.$store.commit("setUploadFileId", "");
+            $this.$store.commit("setUploadFileId", "");
         },
         methods: {
             addProgressButton(value) {
